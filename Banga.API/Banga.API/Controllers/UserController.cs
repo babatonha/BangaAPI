@@ -7,16 +7,16 @@ namespace Banga.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly IUsersService _usersRepository;  
-        public UsersController(IUsersService usersRepository)
+        private readonly IUserService _usersRepository;  
+        public UserController(IUserService usersRepository)
         {
             _usersRepository = usersRepository; 
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> Get() 
+        public async Task<ActionResult<IEnumerable<AppUser>>> Get() 
         {
             var users =  await _usersRepository.GetUsers();
 
