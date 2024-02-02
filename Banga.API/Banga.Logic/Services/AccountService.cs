@@ -37,7 +37,6 @@ namespace Banga.Logic.Services
             {
                 UserName = user.UserName,
                 Token = await _tokenService.CreateToken(user),
-                PhotoUrl = ""
             };
         }
 
@@ -50,11 +49,12 @@ namespace Banga.Logic.Services
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
 
-            var roleResult = await _userManager.AddToRoleAsync(user, UserType.Member.ToString());
+            //var roleResult = await _userManager.AddToRoleAsync(user, UserType.Member.ToString());
 
             return new UserDto
             {
                 UserName = user.UserName,
+                Email = registerDto.Email,
                 Token = await _tokenService.CreateToken(user),
             };
         }

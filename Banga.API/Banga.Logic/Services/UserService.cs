@@ -30,7 +30,7 @@ namespace Banga.Logic.Services
             return  new AppUser
             {
                 Id = 1,
-                UserName = _tokenService.CreateToken(userData)
+                UserName = await _tokenService.CreateToken(userData)
             };
         }
 

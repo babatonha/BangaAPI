@@ -20,6 +20,7 @@ namespace Banga.Domain.Mappers
            return new AppUser
             {
                UserName = dto.UserName,
+               Email = dto.Email,
             };
         }
     }
