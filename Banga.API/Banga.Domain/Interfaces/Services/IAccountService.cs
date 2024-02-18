@@ -1,7 +1,6 @@
-﻿using Banga.Data.Models;
-using Banga.Domain.DTOs;
+﻿using Banga.Domain.DTOs;
 
-namespace Banga.Domain.Interfaces
+namespace Banga.Domain.Interfaces.Services
 {
     public interface IAccountService
     {

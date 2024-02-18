@@ -1,5 +1,5 @@
 ﻿using Banga.Data.Models;
-using Banga.Domain.Interfaces;
+using Banga.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,7 +30,7 @@ namespace Banga.Logic.Services
             return  new AppUser
             {
                 Id = 1,
-                UserName = _tokenService.CreateToken(userData)
+                UserName = await _tokenService.CreateToken(userData)
             };
         }
 

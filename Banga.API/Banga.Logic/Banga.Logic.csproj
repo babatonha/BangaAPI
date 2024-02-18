@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Banga.Data\Banga.Data.csproj" />
     <ProjectReference Include="..\Banga.Domain\Banga.Domain.csproj" />
   </ItemGroup>
 

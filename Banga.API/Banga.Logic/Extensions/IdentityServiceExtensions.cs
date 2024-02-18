@@ -1,4 +1,5 @@
-﻿using Banga.Data;
+﻿
+using Banga.Data;
 using Banga.Data.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
