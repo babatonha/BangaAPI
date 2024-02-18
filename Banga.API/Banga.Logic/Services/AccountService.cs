@@ -1,13 +1,17 @@
 ﻿using Banga.Data.Models;
-using Banga.Domain;
 using Banga.Domain.DTOs;
-using Banga.Domain.Interfaces;
+using Banga.Domain.Interfaces.Services;
 using Banga.Domain.Mappers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Banga.Logic.Services
 {
+
+    //TODO:  
+    //Forget password
+    //reset password
+
     public class AccountService : IAccountService
     {
         private readonly UserManager<AppUser> _userManager;
@@ -58,6 +62,26 @@ namespace Banga.Logic.Services
                 Token = await _tokenService.CreateToken(user),
             };
         }
+
+
+        //[Route("ChangePassword")]
+        //public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
+        //        model.NewPassword);
+
+        //    if (!result.Succeeded)
+        //    {
+        //        return GetErrorResult(result);
+        //    }
+
+        //    return Ok();
+        //}
 
         public async Task<bool> UserExists(string username)
         {

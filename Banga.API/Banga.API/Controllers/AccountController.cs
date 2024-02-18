@@ -1,6 +1,6 @@
 ﻿using Banga.Data.Models;
 using Banga.Domain.DTOs;
-using Banga.Domain.Interfaces;
+using Banga.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 

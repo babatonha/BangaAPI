@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Banga.Data\Banga.Data.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
   </ItemGroup>
 
 </Project>

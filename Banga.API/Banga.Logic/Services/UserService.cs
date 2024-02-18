@@ -1,5 +1,5 @@
 ﻿using Banga.Data.Models;
-using Banga.Domain.Interfaces;
+using Banga.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

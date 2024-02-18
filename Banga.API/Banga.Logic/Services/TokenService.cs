@@ -1,5 +1,5 @@
 ﻿using Banga.Data.Models;
-using Banga.Domain.Interfaces;
+using Banga.Domain.Interfaces.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
