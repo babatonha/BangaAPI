@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Banga.Data.Models;
+﻿namespace Banga.Data.Models;
 
 public partial class Province
 {

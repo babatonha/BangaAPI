@@ -6,5 +6,5 @@ public partial class City
 
     public int ProviceId { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string Name { get; set; } = null!; 
 }

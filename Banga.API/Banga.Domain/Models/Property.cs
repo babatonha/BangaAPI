@@ -3,7 +3,7 @@
 public partial class Property
 {
     public long PropertyId { get; set; }
-    public int OwnerId { get; set; }
+    public int? OwnerId { get; set; }
     public string? OwnerName { get; set; }
     public int? AssignedLawyerId { get; set; }
     public int? StatusID { get; set; }

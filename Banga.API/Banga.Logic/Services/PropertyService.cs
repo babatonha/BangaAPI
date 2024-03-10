@@ -7,24 +7,28 @@ namespace Banga.Logic.Services
 {
     public class PropertyService : IPropertyService
     {
-        private readonly IPropertyRepository _propertyRepository;    
-        public PropertyService(IPropertyRepository propertyRepository)
+        private readonly IPropertyRepository _propertyRepository;
+        private readonly IPropertyPhotoRepository _propertyPhotoRepository;
+
+        public PropertyService(IPropertyRepository propertyRepository, IPropertyPhotoRepository propertyPhotoRepository)
         {
-            _propertyRepository = propertyRepository;   
+            _propertyRepository = propertyRepository;
+            _propertyPhotoRepository = propertyPhotoRepository; 
         }
 
         public async Task<VwProperty> GetPropertyDetailsById(long propertyId)
         {
-            var property = await _propertyRepository.GetPropertyById(propertyId);
-            var photos = await _propertyRepository.GetPropertyPhotosByPropertyId(propertyId);
-            var offers = await _propertyRepository.GetPropertyOffersByPropertyId(propertyId);
+            var property =  _propertyRepository.GetPropertyById(propertyId);
+            var photos = _propertyPhotoRepository.GetPropertyPhotosByPropertyId(propertyId);
+            var offers =  _propertyRepository.GetPropertyOffersByPropertyId(propertyId);
 
+            await Task.WhenAll(property, photos, offers);
 
             return new VwProperty
             {
-                Property = property,
-                PropertyOffers = offers,
-                PropertyPhotos = photos
+                Property = property.Result,
+                PropertyOffers = offers.Result,
+                PropertyPhotos = photos.Result
             };
         }
 
@@ -32,5 +36,16 @@ namespace Banga.Logic.Services
         {
             return _propertyRepository.GetProperties();
         }
+
+        public Task<long> CreateProperty(Property property)
+        {
+            return _propertyRepository.CreateProperty(property);
+        }
+
+        public Task UpdateProperty(Property property)
+        {
+            return _propertyRepository.UpdateProperty(property);    
+        }
+
     }
 }

@@ -1,12 +1,14 @@
 ﻿using Banga.Data.Models;
 using Banga.Data.ViewModels;
 using Banga.Domain.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Banga.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PropertyController : ControllerBase
     {
         private readonly IPropertyService _propertyService;  
@@ -26,6 +28,19 @@ namespace Banga.API.Controllers
             }
 
             return Ok(properties);    
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<long>> CreateProperty([FromBody] Property property)
+        {
+            if(property.PropertyId >0) 
+            { 
+                 await _propertyService.UpdateProperty(property);
+                return Ok(property.PropertyId);
+            }
+            var propertyId = await _propertyService.CreateProperty(property);
+
+            return Ok(propertyId);
         }
 
         [HttpGet("{propertyId}")]

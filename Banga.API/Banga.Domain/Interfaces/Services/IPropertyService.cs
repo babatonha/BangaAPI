@@ -6,6 +6,9 @@ namespace Banga.Domain.Interfaces.Services
     public interface IPropertyService
     {
         Task<IEnumerable<Property>> GetProperties();
-        Task<VwProperty> GetPropertyDetailsById(long propertyId); 
+        Task<VwProperty> GetPropertyDetailsById(long propertyId);
+        Task<long> CreateProperty(Property property);
+        Task UpdateProperty(Property property);
+
     }
 }

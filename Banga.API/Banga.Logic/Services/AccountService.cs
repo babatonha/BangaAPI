@@ -29,7 +29,6 @@ namespace Banga.Logic.Services
                                     //.Include(p => p.Photos)
                                     .SingleOrDefaultAsync(x => x.UserName == loginDto.UserName);
 
-
             var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
             if (!result)
