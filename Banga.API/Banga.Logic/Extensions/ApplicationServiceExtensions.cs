@@ -22,14 +22,14 @@ namespace Banga.Logic.Extensions
             services.AddScoped<IPropertyTypeService, PropertyTypeService>();
             services.AddScoped<ILawFirmService, LawFirmService>();
             services.AddScoped<ICloudinaryPhotoService, CloudinaryPhotoService>();
-
-
+            services.AddScoped<IBuyerListingService, BuyerListingService>();
 
             services.AddScoped<IPropertyRepository, PropertyRepository>();
             services.AddScoped<IPropertyPhotoRepository, PropertyPhotoRepository>();
             services.AddScoped<IPropertyLocationRepository, PropertyLocationRepository>();
             services.AddScoped<IPropertyTypeRepository, PropertyTypeRepository>();
             services.AddScoped<ILawFirmRepository, LawFirmRepository>();
+            services.AddScoped<IBuyerListingRepository, BuyerListingRepository>();  
 
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
     

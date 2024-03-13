@@ -1,5 +1,6 @@
 ﻿using Banga.Data.Models;
 using Banga.Data.ViewModels;
+using Banga.Domain.DTOs;
 using Banga.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +18,10 @@ namespace Banga.API.Controllers
             _propertyService = propertyService; 
         }
 
-        [HttpGet]   
-        public async Task<ActionResult<IEnumerable<Property>>> Get() 
+        [HttpPost("FilteredSearch")]   
+        public async Task<ActionResult<IEnumerable<Property>>> Get([FromBody] SearchFilterDTO searchFilter) 
         {
-            var properties = await _propertyService.GetProperties();
+            var properties = await _propertyService.GetProperties(searchFilter);
 
             if (!properties.Any())
             {

@@ -16,10 +16,18 @@ namespace Banga.API.Controllers
             _propertyLocationService = propertyLocationService;
         }
 
-        [HttpGet]
+        [HttpGet("Cities")]
         public async Task<ActionResult<IEnumerable<City>>> GetCities()
         {
             var data = await _propertyLocationService.GetCities();
+
+            return Ok(data);
+        }
+
+        [HttpGet("CitySuburbs")]
+        public async Task<ActionResult<IEnumerable<string>>> GetCitySuburbs()
+        {
+            var data = await _propertyLocationService.GetCitySuburbs();
 
             return Ok(data);
         }

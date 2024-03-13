@@ -12,6 +12,21 @@ namespace Banga.Logic.Services
             _lawFirmRepository = lawFirmRepository; 
         }
 
+        public Task<int> CreateLawFirm(LawFirm firm)
+        {
+            return _lawFirmRepository.CreateLawFirm(firm);
+        }
+
+        public Task DisableLawFirm(LawFirm firm)
+        {
+            return _lawFirmRepository.DisableLawFirm(firm);
+        }
+
+        public Task UpdateLawFirm(LawFirm firm)
+        {
+            return _lawFirmRepository.UpdateLawFirm(firm);
+        }
+
         Task<IEnumerable<LawFirm>> ILawFirmService.GetLawFirms()
         {
             return _lawFirmRepository.GetLawFirms();

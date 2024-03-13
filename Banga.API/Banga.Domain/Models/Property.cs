@@ -25,4 +25,11 @@ public partial class Property
     public string? YoutubeUrl { get; set; }
     public bool? HasLawyer { get; set; }
     public int? NumberOfLikes { get; set; }
+    public string? SuburbName { get; set; }
+    public int? SuburbId { get; set; }
+    public string? SqureMeters { get; set; }
+    public string? Amenities { get; set; }
+    public DateTime? CreatedDate { get; set; }
+    public bool? IsActive { get; set; }
+    public bool? IsDeleted { get; set; }
 }

@@ -23,5 +23,29 @@ namespace Banga.API.Controllers
 
             return Ok(data);
         }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateLawFirm([FromBody] LawFirm firm)
+        {
+            await _lawFirmService.UpdateLawFirm(firm);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<int>> CreateLawFirm([FromBody] LawFirm firm)
+        {
+            var firmId = await _lawFirmService.CreateLawFirm(firm);
+
+            return Ok(firmId);
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult<int>> DisableLawFirm([FromBody] LawFirm firm)
+        {
+            await _lawFirmService.DisableLawFirm(firm);
+
+            return Ok();
+        }
     }
 }

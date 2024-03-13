@@ -1,6 +1,7 @@
 ﻿using Banga.Data.Models;
 using Banga.Domain.Interfaces.Repositories;
 using Banga.Domain.Interfaces.Services;
+using Banga.Domain.Models;
 
 namespace Banga.Logic.Services
 {
@@ -11,6 +12,11 @@ namespace Banga.Logic.Services
         {
             _propertyTypeRepository = propertyTypeRepository;
 
+        }
+
+        public Task<IEnumerable<RegistrationType>> GetPropertyRegistrationTypes()
+        {
+            return _propertyTypeRepository.GetPropertyRegistrationTypes();
         }
 
         public Task<IEnumerable<PropertyType>> GetPropertyTypes()

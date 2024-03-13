@@ -1,4 +1,5 @@
 ﻿using Banga.Data.Models;
+using Banga.Domain.DTOs;
 
 namespace Banga.Domain.Interfaces.Repositories
 {
@@ -6,7 +7,7 @@ namespace Banga.Domain.Interfaces.Repositories
     {
         Task<long> CreateProperty(Property property);
         Task UpdateProperty(Property property);
-        Task<IEnumerable<Property>> GetProperties();
+        Task<IEnumerable<Property>> GetProperties(SearchFilterDTO searchFilter);
         Task<Property> GetPropertyById(long propertyId);
         Task<IEnumerable<PropertyOffer>> GetPropertyOffersByPropertyId(long propertyId);
     }

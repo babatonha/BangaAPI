@@ -1,8 +1,11 @@
 ﻿using Banga.Data.Models;
+using Banga.Data.Queries;
+using Banga.Domain.DTOs;
 using Banga.Domain.Interfaces.Repositories;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using static Azure.Core.HttpHeader;
 
 namespace Banga.Data.Repositories
 {
@@ -131,25 +134,29 @@ namespace Banga.Data.Repositories
             });
         }
 
-        public async Task<IEnumerable<Property>> GetProperties()
+        public async Task<IEnumerable<Property>> GetProperties(SearchFilterDTO searchFilter)
         {
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                var sql = @"
+                string searchTerms = string.Join(", ", searchFilter.SearchTerms.Select(name => $"'{name}'"));
+
+                var sql = $@"
                             SELECT 
-                                P.[PropertyID]
+                                   P.[PropertyID]
                                   ,P.[OwnerID]
-                               ,OU.FirstName + ' ' + OU.LastName AS OwnerName
+                                  ,OU.FirstName + ' ' + OU.LastName AS OwnerName
                                   ,P.[AssignedLawyerID]
-                               ,OL.FirstName + ' ' + OL.LastName AS AssignedLawyerName
+                                  ,OL.FirstName + ' ' + OL.LastName AS AssignedLawyerName
                                   ,P.[PropertyTypeID]
-                               ,PT.[Name] AS PropertyTypeName
+                                  ,PT.[Name] AS PropertyTypeName
                                   ,P.[StatusID]
-                               ,S.[Name]  AS StatusName
+                                  ,S.[Name]  AS StatusName
+                                  ,P.[SuburbId]
+                                  ,SB.Name AS SuburbName
                                   ,P.[CityID]
-                               ,C.[Name] AS CityName
+                                  ,C.[Name] AS CityName
                                   ,P.[ProvinceID]
-                               ,PR.[Name] AS ProvinceName
+                                  ,PR.[Name] AS ProvinceName
                                   ,P.[Address]
                                   ,P.[Price]
                                   ,P.[Description]
@@ -159,16 +166,42 @@ namespace Banga.Data.Repositories
                                   ,P.[ThumbnailUrl]
                                   ,P.[YoutubeUrl]
                                   ,P.[HasLawyer]
-                                  ,P.[NumberOfLikes]                         
+                                  ,P.[NumberOfLikes] 
+                                  ,P.[SqureMeters]
+                                  ,P.[Amenities]
+                                  ,P.[CreatedDate]
+                                  ,P.[IsActive]
+                                  ,P.[IsDeleted]
                               FROM [dbo].[Property] P 
                               JOIN AspNetUsers OU ON OU.Id = P.OwnerID
                               JOIN PropertyType PT ON PT.PropertyTypeID = P.PropertyTypeID
                               JOIN AspNetUsers OL ON OL.Id = P.AssignedLawyerID
                               JOIN [dbo].[Status] S ON S.StatusID = P.StatusID
                               JOIN [dbo].[City] C ON C.CityID = P.CityID
-                              JOIN Province PR ON PR.ProvinceID = P.ProvinceID";
+                              JOIN Province PR ON PR.ProvinceID = P.ProvinceID
+                              JOIN Suburb SB ON SB.SuburbId = P.SuburbId
+                            WHERE
+                                P.[IsActive] = 1
+                                AND P.[IsDeleted] = 0
+                               
+                                {PropertyQueries.WhereBaths(searchFilter.Baths)}
+                                {PropertyQueries.WhereBeds(searchFilter.Beds)}
+                                {PropertyQueries.WherePropertyType(searchFilter.PropertyTypeId)}
+                                {PropertyQueries.WhereRegistrationType(searchFilter.RegistrationTypeId)}
+                                {PropertyQueries.WhereMinPrice(searchFilter.MinPrice)}
+                                {PropertyQueries.WhereMaxPrice(searchFilter.MaxPrice)}
+                                {PropertyQueries.WhereRegistrationType(searchFilter.RegistrationTypeId)}
+                                {PropertyQueries.WhereSearchTermsInCityOrSuburb(searchTerms)}";
 
-                return await connection.QueryAsync<Property>(sql, new { });
+                return await connection.QueryAsync<Property>(sql, new {
+                    searchFilter.PropertyTypeId,
+                    searchFilter.MinPrice,
+                    searchFilter.MaxPrice,  
+                    searchFilter.RegistrationTypeId,
+                    searchTerms,
+                    searchFilter.Baths,
+                    searchFilter.Beds
+                });
 
             }
         }

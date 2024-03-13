@@ -16,5 +16,10 @@ namespace Banga.Logic.Services
         {
             return _propertyLocationRepository.GetCities();
         }
+
+        public Task<IEnumerable<string>> GetCitySuburbs()
+        {
+            return _propertyLocationRepository.GetCitySuburbs();    
+        }
     }
 }

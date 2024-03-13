@@ -1,5 +1,6 @@
 ﻿using Banga.Data.Models;
 using Banga.Domain.Interfaces.Services;
+using Banga.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,14 @@ namespace Banga.API.Controllers
         public async Task<ActionResult<IEnumerable<PropertyType>>> Get()
         {
             var data = await _propertyTypeService.GetPropertyTypes();
+
+            return Ok(data);
+        }
+
+        [HttpGet("RegistrationTypes")]
+        public async Task<ActionResult<IEnumerable<RegistrationType>>> GetRegistrationTypes()
+        {
+            var data = await _propertyTypeService.GetPropertyRegistrationTypes();
 
             return Ok(data);
         }

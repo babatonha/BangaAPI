@@ -1,5 +1,6 @@
 ﻿using Banga.Data.Models;
 using Banga.Data.ViewModels;
+using Banga.Domain.DTOs;
 using Banga.Domain.Interfaces.Repositories;
 using Banga.Domain.Interfaces.Services;
 
@@ -32,9 +33,9 @@ namespace Banga.Logic.Services
             };
         }
 
-        public Task<IEnumerable<Property>> GetProperties()
+        public Task<IEnumerable<Property>> GetProperties(SearchFilterDTO searchFilter)
         {
-            return _propertyRepository.GetProperties();
+            return _propertyRepository.GetProperties(searchFilter);
         }
 
         public Task<long> CreateProperty(Property property)
