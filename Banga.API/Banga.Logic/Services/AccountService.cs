@@ -38,6 +38,8 @@ namespace Banga.Logic.Services
 
             return new UserDto
             {
+                Id = user.Id,
+                Email = user.Email,
                 UserName = user.UserName,
                 Token = await _tokenService.CreateToken(user),
             };
@@ -56,6 +58,7 @@ namespace Banga.Logic.Services
 
             return new UserDto
             {
+                Id = user.Id,
                 UserName = user.UserName,
                 Email = registerDto.Email,
                 Token = await _tokenService.CreateToken(user),

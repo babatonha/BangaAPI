@@ -1,9 +1,9 @@
 ﻿using Banga.Data.Repositories;
 using Banga.Domain.Interfaces.Repositories;
 using Banga.Domain.Interfaces.Services;
+using Banga.Domain.Mappers;
 using Banga.Domain.Models;
 using Banga.Logic.Services;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,13 +18,17 @@ namespace Banga.Logic.Extensions
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IPropertyService, PropertyService>();
             services.AddScoped<IPropertyPhotoService, PropertyPhotoService>();
+            services.AddScoped<IPropertyOfferService, PropertyOfferService>();
             services.AddScoped<IPropertyLocationService, PropertyLocationService>();
             services.AddScoped<IPropertyTypeService, PropertyTypeService>();
             services.AddScoped<ILawFirmService, LawFirmService>();
             services.AddScoped<ICloudinaryPhotoService, CloudinaryPhotoService>();
             services.AddScoped<IBuyerListingService, BuyerListingService>();
+            services.AddScoped<IMessageService, MessageService>();
+
 
             services.AddScoped<IPropertyRepository, PropertyRepository>();
+            services.AddScoped<IPropertyOfferRepository, PropertyOfferRepository>();
             services.AddScoped<IPropertyPhotoRepository, PropertyPhotoRepository>();
             services.AddScoped<IPropertyLocationRepository, PropertyLocationRepository>();
             services.AddScoped<IPropertyTypeRepository, PropertyTypeRepository>();
@@ -32,6 +36,7 @@ namespace Banga.Logic.Extensions
             services.AddScoped<IBuyerListingRepository, BuyerListingRepository>();  
 
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
     
 
             return services;

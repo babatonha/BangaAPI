@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Banga.Domain.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Banga.Data.Models
 {
@@ -8,5 +9,7 @@ namespace Banga.Data.Models
         public string? LastName { get; set; } 
         public string? IdNumber { get; set; }
         public ICollection<AppUserRole> UserRoles { get; set; }
+        public List<Message> MessagesSend { get; set; }
+        public List<Message> MessagesReceived { get; set; }
     }
 }

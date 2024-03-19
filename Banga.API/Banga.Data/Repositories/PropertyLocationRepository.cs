@@ -1,7 +1,5 @@
 ﻿using Banga.Data.Models;
 using Banga.Domain.Interfaces.Repositories;
-using Banga.Domain.Models;
-using Banga.Domain.ViewModels;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;

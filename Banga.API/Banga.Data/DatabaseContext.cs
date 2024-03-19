@@ -1,5 +1,6 @@
 ﻿
 using Banga.Data.Models;
+using Banga.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,8 @@ namespace Banga.Data
         public DatabaseContext(DbContextOptions options) : base(options)
         {
         }
+
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -27,6 +30,16 @@ namespace Banga.Data
                .WithOne(u => u.Role)
                .HasForeignKey(ur => ur.RoleId)
                .IsRequired();
+
+            builder.Entity<Message>()
+                .HasOne(u => u.Recipient)
+                .WithMany(m => m.MessagesReceived)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Message>()
+             .HasOne(u => u.Sender)
+             .WithMany(m => m.MessagesSend)
+             .OnDelete(DeleteBehavior.Restrict);
         }
 
     }

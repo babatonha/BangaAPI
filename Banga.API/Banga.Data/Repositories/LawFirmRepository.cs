@@ -81,7 +81,7 @@ namespace Banga.Data.Repositories
                WHERE
                    [LawFirmID] = @LawFirmID";
 
-            using var connection = new SqlConnection(_configuration.GetConnectionString("SqlConnection"));
+            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             await connection.ExecuteAsync(sql, new
             {
                 firm.LawFirmID,
@@ -107,7 +107,7 @@ namespace Banga.Data.Repositories
                WHERE
                    [LawFirmID] = @LawFirmID";
 
-            using var connection = new SqlConnection(_configuration.GetConnectionString("SqlConnection"));
+            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             await connection.ExecuteAsync(sql, new
             {
                 firm.LawFirmID,

@@ -60,7 +60,7 @@ namespace Banga.Data.Repositories
                WHERE
                    [PropertyPhotoId] = @PropertyPhotoId";
 
-            using var connection = new SqlConnection(_configuration.GetConnectionString("SqlConnection"));
+            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             await connection.ExecuteAsync(sql, new
             {
                 photo.PropertyPhotoId
@@ -79,7 +79,7 @@ namespace Banga.Data.Repositories
                WHERE
                    [PropertyPhotoId] = @PropertyPhotoId";
 
-            using var connection = new SqlConnection(_configuration.GetConnectionString("SqlConnection"));
+            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             await connection.ExecuteAsync(sql, new
             {
                 propertyPhotoId

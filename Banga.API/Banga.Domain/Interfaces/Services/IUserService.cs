@@ -6,5 +6,7 @@ namespace Banga.Domain.Interfaces.Services
     {
         Task<IEnumerable<AppUser>> GetUsers();
         Task<AppUser> GetUserById(int userId);
+
+        Task<AppUser> GetUserByUserName(string username);
     }
 }

@@ -10,18 +10,21 @@ namespace Banga.Logic.Services
     {
         private readonly IPropertyRepository _propertyRepository;
         private readonly IPropertyPhotoRepository _propertyPhotoRepository;
+        private readonly IPropertyOfferRepository _propertyOfferRepository;
 
-        public PropertyService(IPropertyRepository propertyRepository, IPropertyPhotoRepository propertyPhotoRepository)
+        public PropertyService(IPropertyRepository propertyRepository, IPropertyPhotoRepository propertyPhotoRepository,
+            IPropertyOfferRepository propertyOfferRepository)
         {
             _propertyRepository = propertyRepository;
-            _propertyPhotoRepository = propertyPhotoRepository; 
+            _propertyPhotoRepository = propertyPhotoRepository;
+            _propertyOfferRepository = propertyOfferRepository; 
         }
 
         public async Task<VwProperty> GetPropertyDetailsById(long propertyId)
         {
             var property =  _propertyRepository.GetPropertyById(propertyId);
             var photos = _propertyPhotoRepository.GetPropertyPhotosByPropertyId(propertyId);
-            var offers =  _propertyRepository.GetPropertyOffersByPropertyId(propertyId);
+            var offers = _propertyOfferRepository.GetOffersByPropertyId(propertyId);
 
             await Task.WhenAll(property, photos, offers);
 

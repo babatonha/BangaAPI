@@ -5,7 +5,6 @@ using Banga.Domain.Interfaces.Repositories;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using static Azure.Core.HttpHeader;
 
 namespace Banga.Data.Repositories
 {
@@ -17,8 +16,6 @@ namespace Banga.Data.Repositories
             _configuration = configuration;
         }
 
-
-        //Property
         public async Task<long> CreateProperty(Property property)
         {
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
@@ -111,7 +108,7 @@ namespace Banga.Data.Repositories
                WHERE
                    [PropertyId] = @PropertyId";
 
-            using var connection = new SqlConnection(_configuration.GetConnectionString("SqlConnection"));
+            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             await connection.ExecuteAsync(sql, new
             {
                 property.PropertyId

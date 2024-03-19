@@ -55,7 +55,7 @@ namespace Banga.Data.Repositories
                WHERE
                    [BuyerListingId] = @buyerListingId";
 
-            using var connection = new SqlConnection(_configuration.GetConnectionString("SqlConnection"));
+            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             await connection.ExecuteAsync(sql, new
             {
                 buyerListingId
@@ -89,7 +89,7 @@ namespace Banga.Data.Repositories
                WHERE
                    [BuyerListingId] = @BuyerListingId";
 
-            using var connection = new SqlConnection(_configuration.GetConnectionString("SqlConnection"));
+            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             await connection.ExecuteAsync(sql, new
             {
                 buyerListing.UserId,

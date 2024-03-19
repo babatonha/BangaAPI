@@ -20,6 +20,11 @@ namespace Banga.Logic.Services
             return await _userManager.Users.Where(x => x.Id == userId).FirstOrDefaultAsync();
         }
 
+        public async Task<AppUser> GetUserByUserName(string username)
+        {
+            return await _userManager.Users.Where(x => x.UserName == username).FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<AppUser>> GetUsers()
         {
             return await _userManager.Users.ToListAsync();
