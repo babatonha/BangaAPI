@@ -1,6 +1,7 @@
 using Banga.Data;
 using Banga.Logic.Extensions;
 using Banga.Logic.Middleware;
+using Banga.Logic.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,7 +33,11 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseCors(corsPolicyBuilder => corsPolicyBuilder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200")); 
+app.UseCors(corsPolicyBuilder => corsPolicyBuilder
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials()
+    .WithOrigins("http://localhost:4200")); 
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -41,5 +46,6 @@ app.UseAuthorization();
 app.UseHttpsRedirection();
 
 app.MapControllers();
+app.MapHub<PresenceHub>("hubs/presence");
 
 app.Run();

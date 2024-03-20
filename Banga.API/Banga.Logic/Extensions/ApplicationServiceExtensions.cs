@@ -4,6 +4,7 @@ using Banga.Domain.Interfaces.Services;
 using Banga.Domain.Mappers;
 using Banga.Domain.Models;
 using Banga.Logic.Services;
+using Banga.Logic.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,6 +26,7 @@ namespace Banga.Logic.Extensions
             services.AddScoped<ICloudinaryPhotoService, CloudinaryPhotoService>();
             services.AddScoped<IBuyerListingService, BuyerListingService>();
             services.AddScoped<IMessageService, MessageService>();
+            
 
 
             services.AddScoped<IPropertyRepository, PropertyRepository>();
@@ -37,7 +39,9 @@ namespace Banga.Logic.Extensions
 
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
-    
+            services.AddSignalR();
+
+            services.AddSingleton<PresenceTracker>();
 
             return services;
         }

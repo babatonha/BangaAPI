@@ -82,6 +82,24 @@ namespace Banga.API.Controllers
             return Ok(messages);
         }
 
+        [HttpDelete("{messageId}")]
+        public async Task<ActionResult> DeleteMessage(long messageId)
+        {
+            var username = User.GetUsername();
+            var message = await _messageService.GetMessage(messageId);
 
+            if (message.SenderUsername != username && message.RecipientUsername != username) return Unauthorized();
+
+            if(message.SenderUsername == username) message.SenderDeleted = true;
+            if (message.RecipientUsername == username) message.RecipientDeleted = true;
+
+            if(message.SenderDeleted && message.RecipientDeleted)
+            {
+                _messageService.DeleteMessage(message);
+            }
+            if (await _messageService.SaveAllAsync()) return Ok();
+
+            return BadRequest("Problem deleting the message");    
+        }
     }
 }
