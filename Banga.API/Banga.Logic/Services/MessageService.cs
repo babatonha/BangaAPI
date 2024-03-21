@@ -19,6 +19,12 @@ namespace Banga.Logic.Services
             _databaseContext = databaseContext;
             _mapper = mapper;
         }
+
+        public void AddGroup(Group group)
+        {
+            _databaseContext.Groups.Add(group);
+        }
+
         public void AddMessage(Message message)
         {
             _databaseContext.Messages.Add(message);
@@ -29,9 +35,29 @@ namespace Banga.Logic.Services
             _databaseContext.Messages.Remove(message);
         }
 
+        public async  Task<Connection> GetConnection(string connectionId)
+        {
+            return await _databaseContext.Connections.FindAsync(connectionId);    
+        }
+
+        public async Task<Group> GetGroupForConnection(string connectionId)
+        {
+            return await _databaseContext.Groups
+                .Include(x => x.Connections)
+                .Where(x => x.Connections.Any(c => c.ConnectionId == connectionId))
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<Message> GetMessage(long id)
         {
             return await _databaseContext.Messages.FindAsync(id);
+        }
+
+        public async Task<Group> GetMessageGroup(string groupName)
+        {
+            return await _databaseContext.Groups
+              .Include(x => x.Connections)
+              .FirstOrDefaultAsync(x => x.Name == groupName);
         }
 
         public  async Task<PagedList<MessageDTO>> GetMessagesForUser(MessageParams messageParams)
@@ -81,6 +107,11 @@ namespace Banga.Logic.Services
             await SaveAllAsync();
 
             return await query.ProjectTo<MessageDTO>(_mapper.ConfigurationProvider).ToListAsync();
+        }
+
+        public void RemoveConnection(Connection connection)
+        {
+            _databaseContext.Connections.Remove(connection);
         }
 
         public async Task<bool> SaveAllAsync()

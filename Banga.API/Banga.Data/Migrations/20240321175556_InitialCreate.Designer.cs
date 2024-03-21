@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Banga.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240315194430_MessageEntityCreate")]
-    partial class MessageEntityCreate
+    [Migration("20240321175556_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -145,6 +145,35 @@ namespace Banga.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Banga.Domain.Models.Connection", b =>
+                {
+                    b.Property<string>("ConnectionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("GroupName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ConnectionId");
+
+                    b.HasIndex("GroupName");
+
+                    b.ToTable("Connections");
+                });
+
+            modelBuilder.Entity("Banga.Domain.Models.Group", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("Banga.Domain.Models.Message", b =>
@@ -301,6 +330,13 @@ namespace Banga.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Banga.Domain.Models.Connection", b =>
+                {
+                    b.HasOne("Banga.Domain.Models.Group", null)
+                        .WithMany("Connections")
+                        .HasForeignKey("GroupName");
+                });
+
             modelBuilder.Entity("Banga.Domain.Models.Message", b =>
                 {
                     b.HasOne("Banga.Data.Models.AppUser", "Recipient")
@@ -368,6 +404,11 @@ namespace Banga.Data.Migrations
                     b.Navigation("MessagesSend");
 
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Banga.Domain.Models.Group", b =>
+                {
+                    b.Navigation("Connections");
                 });
 #pragma warning restore 612, 618
         }

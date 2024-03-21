@@ -24,7 +24,7 @@ builder.Services.AddCors();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-//app.UseMiddleware<ExceptionMiddleware>();   
+app.UseMiddleware<ExceptionMiddleware>();   
 
 if (app.Environment.IsDevelopment())
 {
@@ -47,5 +47,19 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 app.MapHub<PresenceHub>("hubs/presence");
+app.MapHub<MessageHub>("hubs/message");
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+try
+{
+    var context = services.GetRequiredService<DatabaseContext>();
+    await context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE [Connections]");
+}
+catch (Exception)
+{
+
+	throw;
+}
 
 app.Run();
