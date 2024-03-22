@@ -26,7 +26,8 @@ namespace Banga.Logic.Extensions
             services.AddScoped<ICloudinaryPhotoService, CloudinaryPhotoService>();
             services.AddScoped<IBuyerListingService, BuyerListingService>();
             services.AddScoped<IMessageService, MessageService>();
-            
+            services.AddScoped<ILikesService, LikesService>();
+
 
 
             services.AddScoped<IPropertyRepository, PropertyRepository>();
@@ -35,7 +36,8 @@ namespace Banga.Logic.Extensions
             services.AddScoped<IPropertyLocationRepository, PropertyLocationRepository>();
             services.AddScoped<IPropertyTypeRepository, PropertyTypeRepository>();
             services.AddScoped<ILawFirmRepository, LawFirmRepository>();
-            services.AddScoped<IBuyerListingRepository, BuyerListingRepository>();  
+            services.AddScoped<IBuyerListingRepository, BuyerListingRepository>(); 
+            services.AddScoped<ILikesRepository, LikesRepository>();
 
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
