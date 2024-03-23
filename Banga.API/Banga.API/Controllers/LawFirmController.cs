@@ -24,6 +24,14 @@ namespace Banga.API.Controllers
             return Ok(data);
         }
 
+        [HttpGet("{lawFirmId}")]
+        public async Task<ActionResult<IEnumerable<LawFirm>>> Get(int lawFirmId)
+        {
+            var data = await _lawFirmService.GetLawFirmById(lawFirmId);
+
+            return Ok(data);
+        }
+
         [HttpPut]
         public async Task<ActionResult> UpdateLawFirm([FromBody] LawFirm firm)
         {
@@ -44,6 +52,31 @@ namespace Banga.API.Controllers
         public async Task<ActionResult<int>> DisableLawFirm([FromBody] LawFirm firm)
         {
             await _lawFirmService.DisableLawFirm(firm);
+
+            return Ok();
+        }
+
+        [HttpGet("Ratings/{lawFirmId}/{userId}")]
+        public async Task<ActionResult<LawFirmRating>> GetUserRating(int lawFirmId, int userId)
+        {
+            var data = await _lawFirmService.GetUserRating(lawFirmId, userId);
+
+            return Ok(data);
+        }
+
+
+        [HttpGet("Ratings/{lawFirmId}")]
+        public async Task<ActionResult<IEnumerable<LawFirmRating>>> GetLawFirmRatings(int lawFirmId)
+        {
+            var data = await _lawFirmService.GetLawFirmRatings(lawFirmId);
+
+            return Ok(data);
+        }
+
+        [HttpPost("Ratings")]
+        public async Task<ActionResult> CreateRating([FromBody] LawFirmRating rating)
+        {
+            await _lawFirmService.CreateLawFirmRating(rating);
 
             return Ok();
         }

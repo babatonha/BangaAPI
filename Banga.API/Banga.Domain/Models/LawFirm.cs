@@ -9,6 +9,7 @@
        public int RepresentativeUserId {get; set; }
        public string? Address {get; set; }
        public int CityID {get; set; }
-       public bool IsDisabled { get; set; }  
+       public bool IsDisabled { get; set; }
+       public float TotalRating { get; set; }
     }
 }

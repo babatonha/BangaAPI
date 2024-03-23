@@ -1,11 +1,13 @@
 ﻿using Banga.Domain.Interfaces.Services;
 using Banga.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Banga.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BuyersListingController : ControllerBase
     {
         private readonly IBuyerListingService _buyerListingService; 
