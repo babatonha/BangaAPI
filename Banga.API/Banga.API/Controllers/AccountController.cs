@@ -1,5 +1,6 @@
 ﻿using Banga.Domain.DTOs;
 using Banga.Domain.Interfaces.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -37,6 +38,36 @@ namespace Banga.API.Controllers
             }
 
             return Ok(user);
+        }
+
+        [HttpGet("forgotPassword/{username}")]
+        public async Task<ActionResult<IdentityResult>> ForgotPassword(string username)
+        {
+            var user = await _accountService.GetCurrentUserByUsername(username);
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            var result = await _accountService.ForgotPassword(user);
+
+            return Ok(result);
+        }
+
+        [HttpPost("changePassword")]
+        public async Task<ActionResult<IdentityResult>> ChangePassword([FromBody]ChangePasswordDTO changePasswordDTO)
+        {
+            var user = await _accountService.GetCurrentUserByUsername(changePasswordDTO.Username);
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            var result = await _accountService.ChangePassword(user, changePasswordDTO.OldPassword,changePasswordDTO.NewPassword);
+
+            return Ok(result);
         }
     }
 }

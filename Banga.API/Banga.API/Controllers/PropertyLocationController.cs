@@ -7,7 +7,6 @@ namespace Banga.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class PropertyLocationController : ControllerBase
     {
         private readonly IPropertyLocationService _propertyLocationService; 

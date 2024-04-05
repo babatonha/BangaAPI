@@ -77,6 +77,8 @@ namespace Banga.Data.Repositories
                     ,[RepresentativeUserId]  = @RepresentativeUserId
                     ,[Address] = @Address
                     ,[CityID] = @CityID
+                    ,[IsDisabled] = @IsDisabled
+                    ,[IsFound] = @IsFound
 
                WHERE
                    [LawFirmID] = @LawFirmID";
@@ -91,6 +93,8 @@ namespace Banga.Data.Repositories
                 firm.RepresentativeUserId,
                 firm.Address,
                 firm.CityID
+                ,firm.IsDisabled
+                ,firm.IsFound
 
             });
         }

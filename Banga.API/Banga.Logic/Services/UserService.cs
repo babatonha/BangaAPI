@@ -1,4 +1,6 @@
-﻿using Banga.Data.Models;
+﻿using Banga.Data;
+using Banga.Data.Models;
+using Banga.Domain.DTOs;
 using Banga.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -8,11 +10,35 @@ namespace Banga.Logic.Services
     public class UserService : IUserService
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly ITokenService _tokenService;
-        public UserService(UserManager<AppUser> userManager, ITokenService tokenService)
+        private readonly DatabaseContext _databaseContext;
+        public UserService(UserManager<AppUser> userManager, DatabaseContext databaseContext)
         {
             _userManager = userManager;
-            _tokenService = tokenService;   
+            _databaseContext = databaseContext;
+        }
+
+        public async Task AssignUserRole(int userId, string roleName)
+        {
+            var user = await _userManager.Users.Where(x => x.Id == userId).FirstOrDefaultAsync();   
+            var currentRole = await _userManager.GetRolesAsync(user);   
+
+            if(currentRole.Any()) // this system will always assign one role to a user.
+            {
+                await _userManager.RemoveFromRoleAsync(user, currentRole[0]);
+            }
+
+            await _userManager.AddToRoleAsync(user, roleName);
+        }
+
+        public async Task BlockUser(int userId, bool isBlocked)
+        {
+            var existingUser = await _userManager.Users.Where(x => x.Id == userId).FirstOrDefaultAsync();
+
+            if (existingUser != null)
+            {
+                existingUser.IsBlocked = isBlocked;
+                await _databaseContext.SaveChangesAsync();
+            }
         }
 
         public async Task<AppUser> GetUserById(int userId)
@@ -30,18 +56,18 @@ namespace Banga.Logic.Services
             return await _userManager.Users.ToListAsync();
         }
 
-        public async  Task<AppUser> Login(AppUser userData)
+        public async Task UpdateUser(CreateUserDTO user)
         {
-            return  new AppUser
-            {
-                Id = 1,
-                UserName = await _tokenService.CreateToken(userData)
-            };
-        }
+            var existingUser = await _userManager.Users.Where(x => x.Id == user.Id).FirstOrDefaultAsync();
 
-        public Task<AppUser> Register(AppUser user)
-        {
-            throw new NotImplementedException();
+            if(existingUser != null)
+            {
+                existingUser.PhoneNumber = user.PhoneNumber;
+                existingUser.IdNumber = user.IdNumber;
+                existingUser.Email = user.Email;
+
+                await _databaseContext.SaveChangesAsync();
+            }
         }
     }
 }

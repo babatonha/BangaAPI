@@ -9,7 +9,6 @@ namespace Banga.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class PropertyController : ControllerBase
     {
         private readonly IPropertyService _propertyService;  
@@ -18,7 +17,8 @@ namespace Banga.API.Controllers
             _propertyService = propertyService; 
         }
 
-        [HttpPost("FilteredSearch")]   
+        [HttpPost("FilteredSearch")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Property>>> Get([FromBody] SearchFilterDTO searchFilter) 
         {
             var properties = await _propertyService.GetProperties(searchFilter);
@@ -32,6 +32,7 @@ namespace Banga.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<long>> CreateProperty([FromBody] Property property)
         {
             if(property.PropertyId >0) 
@@ -45,6 +46,7 @@ namespace Banga.API.Controllers
         }
 
         [HttpGet("{propertyId}")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<VwProperty>>> GetPropertyById(long propertyId)
         {
             var property = await _propertyService.GetPropertyDetailsById(propertyId);
@@ -56,5 +58,15 @@ namespace Banga.API.Controllers
 
             return Ok(property);
         }
+
+
+        [HttpPut("Manage")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Property>>> ManageProperty([FromBody] ManagePropertyDTO manageProperty)
+        {
+            await _propertyService.ManageProperty(manageProperty);
+            return Ok();
+        }
+
     }
 }

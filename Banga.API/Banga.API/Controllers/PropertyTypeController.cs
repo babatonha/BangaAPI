@@ -1,14 +1,12 @@
 ﻿using Banga.Data.Models;
 using Banga.Domain.Interfaces.Services;
 using Banga.Domain.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Banga.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class PropertyTypeController : ControllerBase
     {
         private readonly IPropertyTypeService _propertyTypeService; 

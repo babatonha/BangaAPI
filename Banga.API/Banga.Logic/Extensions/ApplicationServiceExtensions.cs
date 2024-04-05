@@ -27,6 +27,7 @@ namespace Banga.Logic.Extensions
             services.AddScoped<IBuyerListingService, BuyerListingService>();
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<ILikesService, LikesService>();
+            services.AddScoped<IEmailService, EmailService>();
 
 
 
@@ -40,6 +41,7 @@ namespace Banga.Logic.Extensions
             services.AddScoped<ILikesRepository, LikesRepository>();
 
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
+            services.Configure<EmailSettings>(config.GetSection("SMTP"));
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddSignalR();
 

@@ -51,5 +51,9 @@ namespace Banga.Logic.Services
             return _propertyRepository.UpdateProperty(property);    
         }
 
+        public Task ManageProperty(ManagePropertyDTO manage)
+        {
+            return _propertyRepository.ManageProperty(manage);
+        }
     }
 }

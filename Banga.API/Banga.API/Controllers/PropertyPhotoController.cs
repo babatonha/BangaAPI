@@ -7,7 +7,7 @@ namespace Banga.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+   
     public class PropertyPhotoController : ControllerBase
     {
         private readonly IPropertyPhotoService _propertyPhotoService;   
@@ -17,6 +17,7 @@ namespace Banga.API.Controllers
         }
 
         [HttpPost("Upload/{propertyId}")]
+        [Authorize]
         public async Task<IActionResult> UploadFiles(List<IFormFile> files, long propertyId)
         {
             if (!files.Any())
@@ -30,6 +31,7 @@ namespace Banga.API.Controllers
         }
 
         [HttpGet("{propertyId}")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<PropertyPhoto>>> GetPropertyPhotosByPropertyId(long propertyId)
         {
             var photos = await _propertyPhotoService.GetPropertyPhotosByPropertyId(propertyId);

@@ -30,6 +30,8 @@ public partial class Property
     public string? SqureMeters { get; set; }
     public string? Amenities { get; set; }
     public DateTime? CreatedDate { get; set; }
+    public DateTime? LastUpdatedDate { get; set; }  
+    public bool? IsSold { get; set; }
     public bool? IsActive { get; set; }
     public bool? IsDeleted { get; set; }
 }

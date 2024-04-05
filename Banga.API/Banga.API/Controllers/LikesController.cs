@@ -7,7 +7,7 @@ namespace Banga.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+   
     public class LikesController : ControllerBase
     {
         private readonly ILikesService _likesService;
@@ -18,6 +18,7 @@ namespace Banga.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<long>> CreateLike([FromBody] Likes likes)
         { 
             if (likes.LikeId > 0)

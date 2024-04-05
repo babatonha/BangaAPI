@@ -7,7 +7,6 @@ namespace Banga.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class LawFirmController : ControllerBase
     {
         private readonly ILawFirmService _lawFirmService;    
@@ -33,6 +32,7 @@ namespace Banga.API.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<ActionResult> UpdateLawFirm([FromBody] LawFirm firm)
         {
             await _lawFirmService.UpdateLawFirm(firm);
@@ -41,6 +41,7 @@ namespace Banga.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<int>> CreateLawFirm([FromBody] LawFirm firm)
         {
             var firmId = await _lawFirmService.CreateLawFirm(firm);
@@ -49,6 +50,7 @@ namespace Banga.API.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public async Task<ActionResult<int>> DisableLawFirm([FromBody] LawFirm firm)
         {
             await _lawFirmService.DisableLawFirm(firm);

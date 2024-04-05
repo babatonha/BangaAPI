@@ -39,6 +39,7 @@ namespace Banga.Data.Repositories
                                 ,[YoutubeUrl]
                                 ,[HasLawyer]
                                 ,[NumberOfLikes]
+                                ,[CreatedDate]
                             )
                         VALUES
         	                (
@@ -58,6 +59,7 @@ namespace Banga.Data.Repositories
                                 ,@YoutubeUrl
                                 ,@HasLawyer
                                 ,@NumberOfLikes
+                                ,GETDATE()
                             )
                         Select SCOPE_IDENTITY()", new
                     {
@@ -104,6 +106,10 @@ namespace Banga.Data.Repositories
                 ,[YoutubeUrl] = @YoutubeUrl
                 ,[HasLawyer] = @HasLawyer
                 ,[NumberOfLikes]  =@NumberOfLikes
+                ,[LastUpdatedDate] = GETDATE()
+                ,[IsSold] = @IsSold
+                ,[IsDeleted] = @IsDeleted
+                ,[IsActive] = @IsActive
 
                WHERE
                    [PropertyId] = @PropertyId";
@@ -128,6 +134,9 @@ namespace Banga.Data.Repositories
                 ,property.YoutubeUrl
                 ,property.HasLawyer
                 ,property.NumberOfLikes
+                ,property.IsActive  
+                ,property.IsSold 
+                ,property.IsDeleted
             });
         }
 
@@ -167,6 +176,8 @@ namespace Banga.Data.Repositories
                                   ,P.[SqureMeters]
                                   ,P.[Amenities]
                                   ,P.[CreatedDate]
+                                  ,P.[LastUpdatedDate]
+                                  ,P.[IsSold]  
                                   ,P.[IsActive]
                                   ,P.[IsDeleted]
                               FROM [dbo].[Property] P 
@@ -231,7 +242,10 @@ namespace Banga.Data.Repositories
                                   ,P.[ThumbnailUrl]
                                   ,P.[YoutubeUrl]
                                   ,P.[HasLawyer]
-                                  ,P.[NumberOfLikes]                         
+                                  ,P.[NumberOfLikes] 
+                                    ,P.[SqureMeters]
+                                    ,P.IsSold
+                                    ,P.IsActive
                               FROM [dbo].[Property] P 
                               JOIN AspNetUsers OU ON OU.Id = P.OwnerID
                               JOIN PropertyType PT ON PT.PropertyTypeID = P.PropertyTypeID
@@ -246,25 +260,27 @@ namespace Banga.Data.Repositories
             }
         }
 
-        //Property Offer
-        public async Task<IEnumerable<PropertyOffer>> GetPropertyOffersByPropertyId(long propertyId)
+        public async Task ManageProperty(ManagePropertyDTO manage)
         {
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            
+            const string sql = @"
+               UPDATE 
+                   [dbo].[Property]
+               SET 
+                 [IsSold] = @IsSold
+                ,[IsActive] = @IsActive
+
+               WHERE
+                   [PropertyId] = @PropertyId";
+
+            using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            await connection.ExecuteAsync(sql, new
             {
-                var sql = @"
-                            SELECT 
-                                  O.[PropertyOfferID]
-                                 ,O.[PropertyID]
-                                 ,O.[OfferBy]
-                                 ,O.[Amount]                    
-                              FROM [dbo].[PropertyOffer] O
-                              WHERE O.PropertyID = @propertyId";
-
-                return await connection.QueryAsync<PropertyOffer>(sql, new { propertyId });
-            }
+                 manage.IsActive
+                ,manage.IsSold
+                ,manage.PropertyId
+            });
         }
-
-    
     }
     
 }

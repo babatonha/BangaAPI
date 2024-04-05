@@ -140,5 +140,23 @@ namespace Banga.Data.Repositories
                 ,propertyOffer.PropertyOfferId
             });
         }
+
+        public async Task<IEnumerable<PropertyOffer>> GetPropertyOffersByPropertyId(long propertyId)
+        {
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                var sql = @"
+                            SELECT 
+                                  O.[PropertyOfferID]
+                                 ,O.[PropertyID]
+                                 ,O.[OfferBy]
+                                 ,O.[Amount]                    
+                              FROM [dbo].[PropertyOffer] O
+                              WHERE O.PropertyID = @propertyId";
+
+                return await connection.QueryAsync<PropertyOffer>(sql, new { propertyId });
+            }
+        }
+
     }
 }

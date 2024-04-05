@@ -10,6 +10,7 @@ namespace Banga.Domain.Interfaces.Services
         Task<VwProperty> GetPropertyDetailsById(long propertyId);
         Task<long> CreateProperty(Property property);
         Task UpdateProperty(Property property);
+        Task ManageProperty(ManagePropertyDTO manage);
 
     }
 }

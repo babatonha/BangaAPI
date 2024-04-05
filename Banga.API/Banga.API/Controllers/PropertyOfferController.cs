@@ -7,7 +7,7 @@ namespace Banga.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+   
     public class PropertyOfferController : ControllerBase
     {
         private readonly IPropertyOfferService _propertyOfferService;    
@@ -33,6 +33,7 @@ namespace Banga.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<long>> CreateOffer([FromBody] PropertyOffer offer)
         {
 
@@ -48,6 +49,7 @@ namespace Banga.API.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<ActionResult> UpdateOffer([FromBody] PropertyOffer offer)
         {
             await _propertyOfferService.UpdateOffer(offer);
@@ -56,7 +58,8 @@ namespace Banga.API.Controllers
         }
 
         [HttpDelete("{propertyOfferId}")]
-        public async Task<ActionResult> GetPropertyPhotosByPropertyId(long propertyOfferId)
+        [Authorize]
+        public async Task<ActionResult> DeleteOffer(long propertyOfferId)
         {
            await _propertyOfferService.DeleteOffer(propertyOfferId);
             return Ok();

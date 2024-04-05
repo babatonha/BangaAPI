@@ -7,7 +7,7 @@ namespace Banga.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    
     public class BuyersListingController : ControllerBase
     {
         private readonly IBuyerListingService _buyerListingService; 
@@ -17,6 +17,7 @@ namespace Banga.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<BuyerListing>>> Get()
         {
             var data = await _buyerListingService.GetBuyerListing();
@@ -25,6 +26,7 @@ namespace Banga.API.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<ActionResult> UpdateBuyerListing([FromBody] BuyerListing buyer)
         {
             await _buyerListingService.UpdateBuyerListing(buyer);
@@ -33,6 +35,7 @@ namespace Banga.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<long>> CreateBuyerListing([FromBody] BuyerListing buyer)
         {
             var buyerId = await _buyerListingService.CreateBuyerListing(buyer);
@@ -40,8 +43,9 @@ namespace Banga.API.Controllers
             return Ok(buyerId);
         }
 
-        [HttpDelete("buyerListingId")]
-        public async Task<ActionResult<int>> DeleteBuyerListing(long buyerListingId)
+        [HttpDelete("{buyerListingId}")]
+        [Authorize]
+        public async Task<ActionResult> DeleteBuyerListing(long buyerListingId)
         {
             await _buyerListingService.DeleteBuyerListing(buyerListingId);
 
