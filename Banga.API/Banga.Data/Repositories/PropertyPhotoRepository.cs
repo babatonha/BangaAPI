@@ -2,6 +2,7 @@
 using Banga.Domain.Interfaces.Repositories;
 using Dapper;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 
 namespace Banga.Data.Repositories
@@ -100,5 +101,19 @@ namespace Banga.Data.Repositories
             }
         }
 
+        public async Task<PropertyPhoto> GetPropertyPhotoById(long propertyPhotoId)
+        {
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                var sql = @"
+                            SELECT 
+                                 *                    
+                              FROM [dbo].[PropertyPhoto] 
+                              WHERE PropertyPhotoId = @propertyPhotoId"
+                ;
+
+                return await connection.QueryFirstOrDefaultAsync<PropertyPhoto>(sql, new { propertyPhotoId });
+            }
+        }
     }
 }

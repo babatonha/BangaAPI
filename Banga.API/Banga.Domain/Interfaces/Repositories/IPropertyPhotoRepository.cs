@@ -8,5 +8,6 @@ namespace Banga.Domain.Interfaces.Repositories
         Task UpdatePropertyPhoto(PropertyPhoto photo);
         Task DeletePropertyPhoto(long propertyPhotoId);
         Task<IEnumerable<PropertyPhoto>> GetPropertyPhotosByPropertyId(long propertyId);
+        Task<PropertyPhoto> GetPropertyPhotoById(long propertyPhotoId);
     }
 }

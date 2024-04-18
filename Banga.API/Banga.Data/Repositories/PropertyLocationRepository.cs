@@ -1,5 +1,6 @@
 ﻿using Banga.Data.Models;
 using Banga.Domain.Interfaces.Repositories;
+using Banga.Domain.Models;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -52,6 +53,20 @@ namespace Banga.Data.Repositories
 
                          ";
                 return await connection.QueryAsync<string>(sql, new { });
+            }
+        }
+
+        public async  Task<IEnumerable<Suburb>> GetSuburbs()
+        {
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                var sql = @"
+	                            SELECT
+		                               S.[SuburbId]
+		                              ,S.[Name]
+	                              FROM [dbo].[Suburb] S
+                         ";
+                return await connection.QueryAsync<Suburb>(sql, new { });
             }
         }
     }

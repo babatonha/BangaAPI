@@ -8,5 +8,6 @@ namespace Banga.Domain.Interfaces.Services
         Task UploadPhotos(List<IFormFile> files, long propertyId);
         Task DeletePhoto(long propertyPhotoId);
         Task<IEnumerable<PropertyPhoto>> GetPropertyPhotosByPropertyId(long propertyId);
+        Task<PropertyPhoto> GetPropertyPhotoById(long propertyPhotoId);
     }
 }

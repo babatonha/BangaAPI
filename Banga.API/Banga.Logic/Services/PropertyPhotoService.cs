@@ -17,7 +17,19 @@ namespace Banga.Logic.Services
             _propertyPhotoRepository = propertyPhotoRepository;
         }
 
-        public Task DeletePhoto(long propertyPhotoId)
+        public async Task DeletePhoto(long propertyPhotoId)
+        {
+            var photo = await _propertyPhotoRepository.GetPropertyPhotoById(propertyPhotoId);
+
+            if(photo != null && photo.PublicID != null)
+            {
+                await _cloudinaryPhotoService.DeletePhotoAsync(photo.PublicID);      
+            }
+
+            await _propertyPhotoRepository.DeletePropertyPhoto(propertyPhotoId);
+        }
+
+        public Task<PropertyPhoto> GetPropertyPhotoById(long propertyPhotoId)
         {
             throw new NotImplementedException();
         }

@@ -27,6 +27,8 @@ namespace Banga.Data.Repositories
                                 ,[AssignedLawyerID]
                                 ,[PropertyTypeID]
                                 ,[StatusID]
+                                ,[SuburbId]
+                                ,[Amenities]
                                 ,[CityID]
                                 ,[ProvinceID]
                                 ,[Address]
@@ -40,6 +42,9 @@ namespace Banga.Data.Repositories
                                 ,[HasLawyer]
                                 ,[NumberOfLikes]
                                 ,[CreatedDate]
+                                ,[IsSold] 
+                                ,[IsDeleted] 
+                                ,[IsActive] 
                             )
                         VALUES
         	                (
@@ -47,6 +52,8 @@ namespace Banga.Data.Repositories
                                 ,@AssignedLawyerID
                                 ,@PropertyTypeID
                                 ,@StatusID
+                                ,@SuburbId
+                                ,@Amenities
                                 ,@CityID
                                 ,@ProvinceID
                                 ,@Address
@@ -60,6 +67,9 @@ namespace Banga.Data.Repositories
                                 ,@HasLawyer
                                 ,@NumberOfLikes
                                 ,GETDATE()
+                                ,0
+                                ,0
+                                ,0
                             )
                         Select SCOPE_IDENTITY()", new
                     {
@@ -79,6 +89,8 @@ namespace Banga.Data.Repositories
                         ,property.YoutubeUrl
                         ,property.HasLawyer
                         ,property.NumberOfLikes
+                        ,property.Amenities
+                        ,property.SuburbId
 
                     });
             }
@@ -94,6 +106,8 @@ namespace Banga.Data.Repositories
                 ,[AssignedLawyerID] = @AssignedLawyerID
                 ,[PropertyTypeID] = @PropertyTypeID
                 ,[StatusID] = @StatusID
+                ,[SuburbId] = @SuburbId
+                ,[Amenities] = @Amenities
                 ,[CityID] =  @CityID
                 ,[ProvinceID] = @ProvinceID
                 ,[Address] = @Address
@@ -137,6 +151,8 @@ namespace Banga.Data.Repositories
                 ,property.IsActive  
                 ,property.IsSold 
                 ,property.IsDeleted
+                ,property.Amenities
+                ,property.SuburbId
             });
         }
 

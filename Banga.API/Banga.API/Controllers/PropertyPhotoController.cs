@@ -37,5 +37,14 @@ namespace Banga.API.Controllers
             var photos = await _propertyPhotoService.GetPropertyPhotosByPropertyId(propertyId);
             return Ok(photos);  
         }
+
+
+        [HttpDelete("{photoId}")]
+        [Authorize]
+        public async Task<ActionResult> DeletePhoto(long photoId)
+        {
+            await _propertyPhotoService.DeletePhoto(photoId);
+            return Ok();
+        }
     }
 }

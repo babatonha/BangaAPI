@@ -1,5 +1,6 @@
 ﻿using Banga.Data.Models;
 using Banga.Domain.Interfaces.Services;
+using Banga.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,14 @@ namespace Banga.API.Controllers
             return Ok(data);
         }
 
+        [HttpGet("Suburbs")]
+        public async Task<ActionResult<IEnumerable<Suburb>>> GetSuburbs()
+        {
+            var data = await _propertyLocationService.GetSuburbs();
+
+            return Ok(data);
+        }
+
         [HttpGet("CitySuburbs")]
         public async Task<ActionResult<IEnumerable<string>>> GetCitySuburbs()
         {
@@ -30,5 +39,6 @@ namespace Banga.API.Controllers
 
             return Ok(data);
         }
+
     }
 }

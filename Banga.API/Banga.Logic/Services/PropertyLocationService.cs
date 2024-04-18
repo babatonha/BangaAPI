@@ -1,6 +1,7 @@
 ﻿using Banga.Data.Models;
 using Banga.Domain.Interfaces.Repositories;
 using Banga.Domain.Interfaces.Services;
+using Banga.Domain.Models;
 
 namespace Banga.Logic.Services
 {
@@ -20,6 +21,11 @@ namespace Banga.Logic.Services
         public Task<IEnumerable<string>> GetCitySuburbs()
         {
             return _propertyLocationRepository.GetCitySuburbs();    
+        }
+
+        public Task<IEnumerable<Suburb>> GetSuburbs()
+        {
+            return _propertyLocationRepository.GetSuburbs();
         }
     }
 }

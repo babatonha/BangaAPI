@@ -1,4 +1,5 @@
 ﻿using Banga.Data.Models;
+using Banga.Domain.Models;
 using Banga.Domain.ViewModels;
 
 namespace Banga.Domain.Interfaces.Services
@@ -7,5 +8,7 @@ namespace Banga.Domain.Interfaces.Services
     {
         Task<IEnumerable<City>> GetCities();
         Task<IEnumerable<string>> GetCitySuburbs();
+
+        Task<IEnumerable<Suburb>> GetSuburbs();
     }
 }
