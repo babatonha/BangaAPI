@@ -1,6 +1,5 @@
 ﻿using Banga.Data.Models;
 using Banga.Domain.Models;
-using Banga.Domain.ViewModels;
 
 namespace Banga.Domain.Interfaces.Services
 {

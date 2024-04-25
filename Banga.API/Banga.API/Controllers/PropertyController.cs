@@ -2,6 +2,7 @@
 using Banga.Data.ViewModels;
 using Banga.Domain.DTOs;
 using Banga.Domain.Interfaces.Services;
+using Banga.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -66,6 +67,14 @@ namespace Banga.API.Controllers
         {
             await _propertyService.ManageProperty(manageProperty);
             return Ok();
+        }
+
+        [HttpGet("Lookup")]
+        [Authorize]
+        public async Task<ActionResult<PropertyLookupData>> GetLookupData()
+        {
+            var data =  await _propertyService.GetPropertyLookupData();
+            return Ok(data);
         }
 
     }

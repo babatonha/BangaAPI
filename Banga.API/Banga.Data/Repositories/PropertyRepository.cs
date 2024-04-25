@@ -259,8 +259,11 @@ namespace Banga.Data.Repositories
                                   ,P.[YoutubeUrl]
                                   ,P.[HasLawyer]
                                   ,P.[NumberOfLikes] 
+                                    ,P.Amenities
+                                    ,P.SuburbId
                                     ,P.[SqureMeters]
                                     ,P.IsSold
+                                    ,P.IsDeleted
                                     ,P.IsActive
                               FROM [dbo].[Property] P 
                               JOIN AspNetUsers OU ON OU.Id = P.OwnerID

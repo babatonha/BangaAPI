@@ -1,6 +1,7 @@
 ﻿using Banga.Data.Models;
 using Banga.Data.ViewModels;
 using Banga.Domain.DTOs;
+using Banga.Domain.Models;
 
 namespace Banga.Domain.Interfaces.Services
 {
@@ -11,6 +12,6 @@ namespace Banga.Domain.Interfaces.Services
         Task<long> CreateProperty(Property property);
         Task UpdateProperty(Property property);
         Task ManageProperty(ManagePropertyDTO manage);
-
+        Task<PropertyLookupData> GetPropertyLookupData();
     }
 }
