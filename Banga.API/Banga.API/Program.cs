@@ -24,7 +24,7 @@ builder.Services.AddCors();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.UseMiddleware<ExceptionMiddleware>();   
+app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -37,7 +37,7 @@ app.UseCors(corsPolicyBuilder => corsPolicyBuilder
     .AllowAnyHeader()
     .AllowAnyMethod()
     .AllowCredentials()
-    .WithOrigins("http://localhost:4200")); 
+    .WithOrigins("http://localhost:4200"));
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -59,7 +59,7 @@ try
 catch (Exception)
 {
 
-	throw;
+    throw;
 }
 
 app.Run();

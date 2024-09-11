@@ -1,5 +1,6 @@
 ﻿using Banga.Data.Models;
 using Banga.Domain.Interfaces.Repositories;
+using Banga.Domain.ViewModels;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +29,7 @@ namespace Banga.Data.Repositories
                                 ,[CreatedDate]
                                 ,[LastUpdatedDate]
                                 ,[IsAccepted]
+                                ,[IsOfferConfirmed]
                             )
                         VALUES
         	                (
@@ -37,6 +39,7 @@ namespace Banga.Data.Repositories
                                 ,@Amount
                                 ,GETDATE()
                                 ,GETDATE()
+                                ,0
                                 ,0
                             )
                         Select SCOPE_IDENTITY()", new
@@ -80,6 +83,7 @@ namespace Banga.Data.Repositories
                                 ,O.[LastUpdatedDate]
                                 ,O.[Description]
                                 ,O.[IsAccepted]
+                                ,O.[IsOfferConfirmed]
                                 , U.FirstName + ' ' + U.LastName AS BuyerName
                               FROM 
                                     [dbo].[PropertyOffer] O
@@ -106,6 +110,7 @@ namespace Banga.Data.Repositories
                                 ,O.[LastUpdatedDate]
                                 ,O.[Description]
                                 ,O.[IsAccepted]
+                                ,O.[IsOfferConfirmed]
                                 , U.FirstName + ' ' + U.LastName AS BuyerName
                               FROM 
                                     [dbo].[PropertyOffer] O
@@ -127,6 +132,7 @@ namespace Banga.Data.Repositories
                             ,[LastUpdatedDate] = GETDATE()
                             ,[IsAccepted] =  @IsAccepted
                             ,[Description] = @Description
+                            ,[IsOfferConfirmed] =  @IsOfferConfirmed
 
                    WHERE
                        [PropertyOfferId] = @PropertyOfferId";
@@ -136,6 +142,7 @@ namespace Banga.Data.Repositories
             {
                  propertyOffer.Amount
                 ,propertyOffer.IsAccepted
+                ,propertyOffer.IsOfferConfirmed
                 ,propertyOffer.Description
                 ,propertyOffer.PropertyOfferId
             });
@@ -158,5 +165,60 @@ namespace Banga.Data.Repositories
             }
         }
 
+        public async Task<IEnumerable<VwUserPropertyOffers>> GetPropertyOffersByUserId(long userId)
+        {
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                var sql = @"
+                           SELECT 
+	                            O.PropertyOfferId,
+	                            O.PropertyId,
+	                            O.[Description],
+	                            O.IsAccepted,
+                                O.IsOfferConfirmed,
+	                            O.Amount,
+	                            O.OfferByUserId,
+	                            T.[Name] AS PropertyType,
+	                            P.Price,
+	                            P.[Address]
+                            FROM PropertyOffer O
+                            JOIN Property  P ON P.PropertyId = O.PropertyId
+                            JOIN PropertyType T ON T.PropertyTypeID = P.PropertyTypeId
+                            WHERE 
+                            P.IsActive = 1
+                            AND P.IsDeleted = 0
+                            AND P.IsSold = 0
+                            AND O.OfferByUserId = @userId"
+                ;
+
+                return await connection.QueryAsync<VwUserPropertyOffers>(sql, new { userId });
+            }
+        }
+
+        public async Task<PropertyOffer> GetOfferById(long offerId)
+        {
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                var sql = @"
+                            SELECT 
+                                 O.PropertyOfferId
+                                ,O.[PropertyId]
+                                ,O.[OfferByUserId]
+                                ,O.[Amount]
+                                ,O.[CreatedDate]
+                                ,O.[LastUpdatedDate]
+                                ,O.[Description]
+                                ,O.[IsAccepted]
+                                ,O.[IsOfferConfirmed]
+                                , U.FirstName + ' ' + U.LastName AS BuyerName
+                              FROM 
+                                    [dbo].[PropertyOffer] O
+                              JOIN [AspNetUsers] U ON U.Id = O.OfferByUserId
+                              WHERE 
+                                    O.PropertyOfferId = @offerId";
+
+                return await connection.QueryFirstOrDefaultAsync<PropertyOffer>(sql, new { offerId });
+            }
+        }
     }
 }

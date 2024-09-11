@@ -1,4 +1,5 @@
 ﻿using Banga.Data.Models;
+using Banga.Domain.ViewModels;
 
 namespace Banga.Domain.Interfaces.Services
 {
@@ -9,5 +10,7 @@ namespace Banga.Domain.Interfaces.Services
         Task<long> CreateOffer(PropertyOffer offer);
         Task DeleteOffer(long offerId);
         Task UpdateOffer(PropertyOffer propertyOffer);
+        Task<IEnumerable<VwUserPropertyOffers>> GetPropertyOffersByUserId(long userId);
+        Task ConfirmOffer(long offerId, bool isConfirmed);
     }
 }
