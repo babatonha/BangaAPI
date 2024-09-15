@@ -27,11 +27,12 @@ public partial class Property
     public int? NumberOfLikes { get; set; }
     public string? SuburbName { get; set; }
     public int? SuburbId { get; set; }
-    public string? SqureMeters { get; set; }
+    public double SquareMetres { get; set; }
     public string? Amenities { get; set; }
     public DateTime? CreatedDate { get; set; }
     public DateTime? LastUpdatedDate { get; set; }  
     public bool? IsSold { get; set; }
     public bool? IsActive { get; set; }
     public bool? IsDeleted { get; set; }
+    public int RegistrationTypeId { get; set; }
 }

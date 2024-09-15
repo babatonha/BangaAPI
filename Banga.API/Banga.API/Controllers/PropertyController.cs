@@ -32,6 +32,20 @@ namespace Banga.API.Controllers
             return Ok(properties);    
         }
 
+        [HttpGet("Owner/{ownerId}")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Property>>> GetOwnerProperties(int ownerId)
+        {
+            var properties = await _propertyService.GetPropertiesByOwnerId(ownerId);
+
+            if (!properties.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(properties);
+        }
+
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<long>> CreateProperty([FromBody] Property property)

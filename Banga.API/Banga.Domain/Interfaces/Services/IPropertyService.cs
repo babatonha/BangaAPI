@@ -9,6 +9,7 @@ namespace Banga.Domain.Interfaces.Services
     {
         Task<IEnumerable<Property>> GetProperties(SearchFilterDTO searchFilter);
         Task<VwProperty> GetPropertyDetailsById(long propertyId);
+        Task<IEnumerable<Property>> GetPropertiesByOwnerId(int ownerId);
         Task<long> CreateProperty(Property property);
         Task UpdateProperty(Property property);
         Task ManageProperty(ManagePropertyDTO manage);

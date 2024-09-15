@@ -83,5 +83,10 @@ namespace Banga.Logic.Services
                 LawFirms = lawFirmTask.Result
             };
         }
+
+        public Task<IEnumerable<Property>> GetPropertiesByOwnerId(int ownerId)
+        {
+            return _propertyRepository.GetPropertiesByOwnerId(ownerId);
+        }
     }
 }

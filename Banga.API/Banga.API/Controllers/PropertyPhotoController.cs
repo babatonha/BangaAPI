@@ -22,12 +22,12 @@ namespace Banga.API.Controllers
         {
             if (!files.Any())
             {
-                return BadRequest("No files were provided.");
+                return BadRequest();
             }
 
             await _propertyPhotoService.UploadPhotos(files, propertyId);
 
-            return Ok("Files uploaded successfully.");
+            return Ok();
         }
 
         [HttpGet("{propertyId}")]

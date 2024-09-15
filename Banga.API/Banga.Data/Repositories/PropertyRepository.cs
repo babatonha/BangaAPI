@@ -2,6 +2,7 @@
 using Banga.Data.Queries;
 using Banga.Domain.DTOs;
 using Banga.Domain.Interfaces.Repositories;
+using CloudinaryDotNet.Actions;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,7 @@ namespace Banga.Data.Repositories
                                  [OwnerID]
                                 ,[AssignedLawyerID]
                                 ,[PropertyTypeID]
+                                ,[RegistrationTypeId]
                                 ,[StatusID]
                                 ,[SuburbId]
                                 ,[Amenities]
@@ -41,6 +43,7 @@ namespace Banga.Data.Repositories
                                 ,[YoutubeUrl]
                                 ,[HasLawyer]
                                 ,[NumberOfLikes]
+                                ,[SquareMetres]
                                 ,[CreatedDate]
                                 ,[IsSold] 
                                 ,[IsDeleted] 
@@ -51,6 +54,7 @@ namespace Banga.Data.Repositories
                                  @OwnerID
                                 ,@AssignedLawyerID
                                 ,@PropertyTypeID
+                                ,@RegistrationTypeId
                                 ,@StatusID
                                 ,@SuburbId
                                 ,@Amenities
@@ -66,6 +70,7 @@ namespace Banga.Data.Repositories
                                 ,@YoutubeUrl
                                 ,@HasLawyer
                                 ,@NumberOfLikes
+                                ,@SquareMetres
                                 ,GETDATE()
                                 ,0
                                 ,0
@@ -76,6 +81,7 @@ namespace Banga.Data.Repositories
                          property.OwnerId
                         ,property.AssignedLawyerId
                         ,property.PropertyTypeId
+                        ,property.RegistrationTypeId
                         ,property.StatusID
                         ,property.CityId
                         ,property.ProvinceId
@@ -89,6 +95,7 @@ namespace Banga.Data.Repositories
                         ,property.YoutubeUrl
                         ,property.HasLawyer
                         ,property.NumberOfLikes
+                        ,property.SquareMetres
                         ,property.Amenities
                         ,property.SuburbId
 
@@ -105,6 +112,7 @@ namespace Banga.Data.Repositories
                  [OwnerID] = @OwnerID
                 ,[AssignedLawyerID] = @AssignedLawyerID
                 ,[PropertyTypeID] = @PropertyTypeID
+                ,[RegistrationTypeId] = @RegistrationTypeId
                 ,[StatusID] = @StatusID
                 ,[SuburbId] = @SuburbId
                 ,[Amenities] = @Amenities
@@ -120,6 +128,7 @@ namespace Banga.Data.Repositories
                 ,[YoutubeUrl] = @YoutubeUrl
                 ,[HasLawyer] = @HasLawyer
                 ,[NumberOfLikes]  =@NumberOfLikes
+                ,[SquareMetres] = @SquareMetres
                 ,[LastUpdatedDate] = GETDATE()
                 ,[IsSold] = @IsSold
                 ,[IsDeleted] = @IsDeleted
@@ -135,6 +144,7 @@ namespace Banga.Data.Repositories
                 ,property.OwnerId
                 ,property.AssignedLawyerId
                 ,property.PropertyTypeId
+                ,property.RegistrationTypeId
                 ,property.StatusID
                 ,property.CityId
                 ,property.ProvinceId
@@ -148,6 +158,7 @@ namespace Banga.Data.Repositories
                 ,property.YoutubeUrl
                 ,property.HasLawyer
                 ,property.NumberOfLikes
+                ,property.SquareMetres
                 ,property.IsActive  
                 ,property.IsSold 
                 ,property.IsDeleted
@@ -189,7 +200,7 @@ namespace Banga.Data.Repositories
                                   ,P.[YoutubeUrl]
                                   ,P.[HasLawyer]
                                   ,P.[NumberOfLikes] 
-                                  ,P.[SqureMeters]
+                                  ,P.[SquareMetres]
                                   ,P.[Amenities]
                                   ,P.[CreatedDate]
                                   ,P.[LastUpdatedDate]
@@ -261,7 +272,7 @@ namespace Banga.Data.Repositories
                                   ,P.[NumberOfLikes] 
                                     ,P.Amenities
                                     ,P.SuburbId
-                                    ,P.[SqureMeters]
+                                    ,P.[SquareMetres]
                                     ,P.IsSold
                                     ,P.IsDeleted
                                     ,P.IsActive
@@ -299,6 +310,63 @@ namespace Banga.Data.Repositories
                 ,manage.IsSold
                 ,manage.PropertyId
             });
+        }
+
+        public async Task<IEnumerable<Property>> GetPropertiesByOwnerId(int ownerId)
+        {
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                var sql = $@"
+                            SELECT 
+                                   P.[PropertyID]
+                                  ,P.[OwnerID]
+                                  ,OU.FirstName + ' ' + OU.LastName AS OwnerName
+                                  ,P.[AssignedLawyerID]
+                                  ,OL.FirstName + ' ' + OL.LastName AS AssignedLawyerName
+                                  ,P.[PropertyTypeID]
+                                  ,PT.[Name] AS PropertyTypeName
+                                  ,P.[StatusID]
+                                  ,S.[Name]  AS StatusName
+                                  ,P.[SuburbId]
+                                  ,SB.Name AS SuburbName
+                                  ,P.[CityID]
+                                  ,C.[Name] AS CityName
+                                  ,P.[ProvinceID]
+                                  ,PR.[Name] AS ProvinceName
+                                  ,P.[Address]
+                                  ,P.[Price]
+                                  ,P.[Description]
+                                  ,P.[NumberOfRooms]
+                                  ,P.[NumberOfBathrooms]
+                                  ,P.[ParkingSpots]
+                                  ,P.[ThumbnailUrl]
+                                  ,P.[YoutubeUrl]
+                                  ,P.[HasLawyer]
+                                  ,P.[NumberOfLikes] 
+                                  ,P.[SquareMetres]
+                                  ,P.[Amenities]
+                                  ,P.[CreatedDate]
+                                  ,P.[LastUpdatedDate]
+                                  ,P.[IsSold]  
+                                  ,P.[IsActive]
+                                  ,P.[IsDeleted]
+                               FROM [dbo].[Property] P 
+                                   JOIN AspNetUsers OU ON OU.Id = P.OwnerID
+                                   JOIN PropertyType PT ON PT.PropertyTypeID = P.PropertyTypeID
+                                   JOIN AspNetUsers OL ON OL.Id = P.AssignedLawyerID
+                                   LEFT JOIN [dbo].[Status] S ON S.StatusID = P.StatusID
+                                   JOIN [dbo].[City] C ON C.CityID = P.CityID
+                                   JOIN Province PR ON PR.ProvinceID = C.ProviceID
+                                   LEFT JOIN Suburb SB ON SB.SuburbId = P.SuburbId
+                                 WHERE
+                                   P.[OwnerID] = @ownerId";
+
+                return await connection.QueryAsync<Property>(sql, new
+                {
+                  ownerId
+                });
+
+            }
         }
     }
     
