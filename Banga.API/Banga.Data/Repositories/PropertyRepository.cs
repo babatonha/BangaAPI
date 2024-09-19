@@ -260,6 +260,8 @@ namespace Banga.Data.Repositories
                                ,C.[Name] AS CityName
                                   ,P.[ProvinceID]
                                ,PR.[Name] AS ProvinceName
+                                   ,RT.[RegistrationTypeId]
+                                  ,RT.[Name] AS RegistrationTypeName
                                   ,P.[Address]
                                   ,P.[Price]
                                   ,P.[Description]
@@ -283,6 +285,7 @@ namespace Banga.Data.Repositories
                               JOIN [dbo].[Status] S ON S.StatusID = P.StatusID
                               JOIN [dbo].[City] C ON C.CityID = P.CityID
                               JOIN Province PR ON PR.ProvinceID = P.ProvinceID
+                              JOIN [RegistrationType] RT ON RT.[RegistrationTypeId] = P.[RegistrationTypeId]
                               WHERE P.PropertyID  = @propertyId";
 
                 return await connection.QueryFirstOrDefaultAsync<Property>(sql, new { propertyId });
