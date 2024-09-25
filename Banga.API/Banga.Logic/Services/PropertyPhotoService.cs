@@ -10,10 +10,14 @@ namespace Banga.Logic.Services
     {
         private readonly ICloudinaryPhotoService _cloudinaryPhotoService;
         private readonly IPropertyPhotoRepository _propertyPhotoRepository;
+        private readonly IPropertyRepository _propertyRepository;
 
-        public PropertyPhotoService(ICloudinaryPhotoService cloudinaryPhotoService, IPropertyPhotoRepository propertyPhotoRepository)
+        public PropertyPhotoService(ICloudinaryPhotoService cloudinaryPhotoService,
+            IPropertyRepository propertyRepository,
+            IPropertyPhotoRepository propertyPhotoRepository)
         {
             _cloudinaryPhotoService = cloudinaryPhotoService;
+            _propertyRepository = propertyRepository;
             _propertyPhotoRepository = propertyPhotoRepository;
         }
 
@@ -41,6 +45,7 @@ namespace Banga.Logic.Services
 
         public async Task UploadPhotos(List<IFormFile> files, long propertyId)
         {
+            var thumbnailUrl = "";
             foreach (var file in files)
             {
                 var cloudinaryPhoto = await _cloudinaryPhotoService.AddPhotoAsync(file);
@@ -54,6 +59,19 @@ namespace Banga.Logic.Services
                 };
 
                 await _propertyPhotoRepository.CreatePropertyPhoto(photo);
+
+                if(thumbnailUrl=="")
+                {
+                    thumbnailUrl = photo.PhotoUrl;
+                }
+            }
+
+            var property =  await _propertyRepository.GetPropertyById(propertyId);
+
+            if(property != null) 
+            {
+                property.ThumbnailUrl = thumbnailUrl;
+                await _propertyRepository.UpdateProperty(property);
             }
         }
     }

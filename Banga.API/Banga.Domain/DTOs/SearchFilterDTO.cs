@@ -9,5 +9,7 @@
         public double MaxPrice { get; set; }
         public int Beds { get; set; }
         public int Baths { get; set; }
+        public int PageIndex { get; set; }
+        public int PageSize { get; set; }
     }
 }

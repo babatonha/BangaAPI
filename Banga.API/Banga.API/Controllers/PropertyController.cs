@@ -20,11 +20,11 @@ namespace Banga.API.Controllers
 
         [HttpPost("FilteredSearch")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Property>>> Get([FromBody] SearchFilterDTO searchFilter) 
+        public async Task<ActionResult<PaginatedList>> Get([FromBody] SearchFilterDTO searchFilter) 
         {
-            var properties = await _propertyService.GetProperties(searchFilter);
+            var properties = await _propertyService.GetProperties(searchFilter, searchFilter.PageIndex,  searchFilter.PageSize);
 
-            if (!properties.Any())
+            if (!properties.Items.Any())
             {
                 return NotFound();
             }
@@ -32,13 +32,14 @@ namespace Banga.API.Controllers
             return Ok(properties);    
         }
 
-        [HttpGet("Owner/{ownerId}")]
+        [HttpPost("Owner/{ownerId}")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Property>>> GetOwnerProperties(int ownerId)
+        public async Task<ActionResult<PaginatedList>> GetOwnerProperties([FromBody] SearchFilterDTO searchFilter, int ownerId)
         {
-            var properties = await _propertyService.GetPropertiesByOwnerId(ownerId);
+            var properties = await _propertyService.GetPropertiesByOwnerId(ownerId,
+                searchFilter.PageIndex, searchFilter.PageSize, searchFilter.SearchTerms.Length > 0 ? searchFilter.SearchTerms[0] : "");
 
-            if (!properties.Any())
+            if (!properties.Items.Any())
             {
                 return NotFound();
             }

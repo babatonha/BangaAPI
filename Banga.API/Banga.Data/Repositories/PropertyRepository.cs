@@ -47,7 +47,8 @@ namespace Banga.Data.Repositories
                                 ,[CreatedDate]
                                 ,[IsSold] 
                                 ,[IsDeleted] 
-                                ,[IsActive] 
+                                ,[IsActive]
+                                ,[StatusID]
                             )
                         VALUES
         	                (
@@ -75,6 +76,7 @@ namespace Banga.Data.Repositories
                                 ,0
                                 ,0
                                 ,0
+                                ,1
                             )
                         Select SCOPE_IDENTITY()", new
                     {
@@ -174,47 +176,49 @@ namespace Banga.Data.Repositories
                 string searchTerms = string.Join(", ", searchFilter.SearchTerms.Select(name => $"'{name}'"));
 
                 var sql = $@"
-                            SELECT 
-                                   P.[PropertyID]
-                                  ,P.[OwnerID]
-                                  ,OU.FirstName + ' ' + OU.LastName AS OwnerName
-                                  ,P.[AssignedLawyerID]
-                                  ,OL.FirstName + ' ' + OL.LastName AS AssignedLawyerName
-                                  ,P.[PropertyTypeID]
-                                  ,PT.[Name] AS PropertyTypeName
-                                  ,P.[StatusID]
-                                  ,S.[Name]  AS StatusName
-                                  ,P.[SuburbId]
-                                  ,SB.Name AS SuburbName
-                                  ,P.[CityID]
-                                  ,C.[Name] AS CityName
-                                  ,P.[ProvinceID]
-                                  ,PR.[Name] AS ProvinceName
-                                  ,P.[Address]
-                                  ,P.[Price]
-                                  ,P.[Description]
-                                  ,P.[NumberOfRooms]
-                                  ,P.[NumberOfBathrooms]
-                                  ,P.[ParkingSpots]
-                                  ,P.[ThumbnailUrl]
-                                  ,P.[YoutubeUrl]
-                                  ,P.[HasLawyer]
-                                  ,P.[NumberOfLikes] 
-                                  ,P.[SquareMetres]
-                                  ,P.[Amenities]
-                                  ,P.[CreatedDate]
-                                  ,P.[LastUpdatedDate]
-                                  ,P.[IsSold]  
-                                  ,P.[IsActive]
-                                  ,P.[IsDeleted]
-                              FROM [dbo].[Property] P 
-                              JOIN AspNetUsers OU ON OU.Id = P.OwnerID
-                              JOIN PropertyType PT ON PT.PropertyTypeID = P.PropertyTypeID
-                              JOIN AspNetUsers OL ON OL.Id = P.AssignedLawyerID
-                              JOIN [dbo].[Status] S ON S.StatusID = P.StatusID
-                              JOIN [dbo].[City] C ON C.CityID = P.CityID
-                              JOIN Province PR ON PR.ProvinceID = P.ProvinceID
-                              JOIN Suburb SB ON SB.SuburbId = P.SuburbId
+                             SELECT 
+                                    P.[PropertyID]
+                                   ,P.[OwnerID]
+                                   ,OU.FirstName + ' ' + OU.LastName AS OwnerName
+                                   ,P.[AssignedLawyerID]
+                                   ,OL.FirstName + ' ' + OL.LastName AS AssignedLawyerName
+                                   ,P.[PropertyTypeID]
+                                   ,PT.[Name] AS PropertyTypeName
+                                   ,P.[StatusID]
+                                   ,S.[Name]  AS StatusName
+                                   ,P.[SuburbId]
+                                   ,SB.Name AS SuburbName
+                                   ,P.[CityID]
+                                   ,C.[Name] AS CityName
+                                   ,P.[ProvinceID]
+                                   ,PR.[Name] AS ProvinceName
+                                   ,P.[Address]
+                                   ,P.[Price]
+                                   ,P.[Description]
+                                   ,P.[NumberOfRooms]
+                                   ,P.[NumberOfBathrooms]
+                                   ,P.[ParkingSpots]
+                                   ,P.[ThumbnailUrl]
+                                   ,P.[YoutubeUrl]
+                                   ,P.[HasLawyer]
+                                   ,P.[NumberOfLikes] 
+                                   ,P.[SquareMetres]
+                                   ,P.[Amenities]
+		                           ,RT.[Name] AS RegistrationTypeName
+                                   ,P.[CreatedDate]
+                                   ,P.[LastUpdatedDate]
+                                   ,P.[IsSold]  
+                                   ,P.[IsActive]
+                                   ,P.[IsDeleted]
+                               FROM [dbo].[Property] P 
+                               JOIN AspNetUsers OU ON OU.Id = P.OwnerID
+                               JOIN PropertyType PT ON PT.PropertyTypeID = P.PropertyTypeID
+	                           JOIN RegistrationType RT ON RT.RegistrationTypeId = P.RegistrationTypeId
+                               JOIN AspNetUsers OL ON OL.Id = P.AssignedLawyerID
+                               JOIN [dbo].[Status] S ON S.StatusID = P.StatusID
+                               JOIN [dbo].[City] C ON C.CityID = P.CityID
+                               LEFT JOIN Province PR ON PR.ProvinceID = P.ProvinceID
+                               LEFT JOIN Suburb SB ON SB.SuburbId = P.SuburbId
                             WHERE
                                 P.[IsActive] = 1
                                 AND P.[IsDeleted] = 0
@@ -282,9 +286,9 @@ namespace Banga.Data.Repositories
                               JOIN AspNetUsers OU ON OU.Id = P.OwnerID
                               JOIN PropertyType PT ON PT.PropertyTypeID = P.PropertyTypeID
                               JOIN AspNetUsers OL ON OL.Id = P.AssignedLawyerID
-                              JOIN [dbo].[Status] S ON S.StatusID = P.StatusID
-                              JOIN [dbo].[City] C ON C.CityID = P.CityID
-                              JOIN Province PR ON PR.ProvinceID = P.ProvinceID
+                              LEFT JOIN [dbo].[Status] S ON S.StatusID = P.StatusID
+                              LEFT JOIN [dbo].[City] C ON C.CityID = P.CityID
+                              LEFT JOIN Province PR ON PR.ProvinceID = P.ProvinceID
                               JOIN [RegistrationType] RT ON RT.[RegistrationTypeId] = P.[RegistrationTypeId]
                               WHERE P.PropertyID  = @propertyId";
 
@@ -315,7 +319,7 @@ namespace Banga.Data.Repositories
             });
         }
 
-        public async Task<IEnumerable<Property>> GetPropertiesByOwnerId(int ownerId)
+        public async Task<IEnumerable<Property>> GetPropertiesByOwnerId(int ownerId, string searchTerms)
         {
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
@@ -362,11 +366,13 @@ namespace Banga.Data.Repositories
                                    JOIN Province PR ON PR.ProvinceID = C.ProviceID
                                    LEFT JOIN Suburb SB ON SB.SuburbId = P.SuburbId
                                  WHERE
-                                   P.[OwnerID] = @ownerId";
+                                   P.[OwnerID] = @ownerId
+                                {PropertyQueries.WhereSearchTermsInCityOrSuburb(searchTerms)}";
 
                 return await connection.QueryAsync<Property>(sql, new
                 {
-                  ownerId
+                  ownerId,
+                    searchTerms
                 });
 
             }

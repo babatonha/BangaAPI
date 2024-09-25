@@ -6,7 +6,7 @@
         {
             if (searchTerms.Length == 0) return string.Empty;
 
-            return $"AND C.[Name] IN ({searchTerms}) OR SB.[Name] IN ({searchTerms})";
+            return $"AND C.[Name] IN ('{searchTerms}') OR SB.[Name] IN ('{searchTerms}')";
         }
 
         public static string WhereBeds(int beds)
