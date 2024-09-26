@@ -9,7 +9,7 @@ namespace Banga.Domain.Interfaces.Services
     {
         Task<PaginatedList> GetProperties(SearchFilterDTO searchFilter, int pageIndex, int pageSize);
         Task<VwProperty> GetPropertyDetailsById(long propertyId);
-        Task<PaginatedList> GetPropertiesByOwnerId(int ownerId, int pageIndex, int pageSize, string searchTerms);
+        Task<PaginatedList> GetPropertiesByOwnerId(int ownerId, int pageIndex, int pageSize, string[] searchTerms);
         Task<long> CreateProperty(Property property);
         Task UpdateProperty(Property property);
         Task ManageProperty(ManagePropertyDTO manage);

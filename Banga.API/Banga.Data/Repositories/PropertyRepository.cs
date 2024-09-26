@@ -319,8 +319,10 @@ namespace Banga.Data.Repositories
             });
         }
 
-        public async Task<IEnumerable<Property>> GetPropertiesByOwnerId(int ownerId, string searchTerms)
+        public async Task<IEnumerable<Property>> GetPropertiesByOwnerId(int ownerId, string[] searchTerms)
         {
+
+            string searchFilter = string.Join(", ", searchTerms.Select(name => $"'{name}'"));
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 var sql = $@"
@@ -367,7 +369,7 @@ namespace Banga.Data.Repositories
                                    LEFT JOIN Suburb SB ON SB.SuburbId = P.SuburbId
                                  WHERE
                                    P.[OwnerID] = @ownerId
-                                {PropertyQueries.WhereSearchTermsInCityOrSuburb(searchTerms)}";
+                                {PropertyQueries.WhereSearchTermsInCityOrSuburb(searchFilter)}";
 
                 return await connection.QueryAsync<Property>(sql, new
                 {

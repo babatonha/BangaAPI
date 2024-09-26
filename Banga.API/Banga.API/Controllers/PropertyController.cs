@@ -37,7 +37,7 @@ namespace Banga.API.Controllers
         public async Task<ActionResult<PaginatedList>> GetOwnerProperties([FromBody] SearchFilterDTO searchFilter, int ownerId)
         {
             var properties = await _propertyService.GetPropertiesByOwnerId(ownerId,
-                searchFilter.PageIndex, searchFilter.PageSize, searchFilter.SearchTerms.Length > 0 ? searchFilter.SearchTerms[0] : "");
+                searchFilter.PageIndex, searchFilter.PageSize, searchFilter.SearchTerms);
 
             if (!properties.Items.Any())
             {

@@ -88,7 +88,7 @@ namespace Banga.Logic.Services
             };
         }
 
-        public async Task<PaginatedList> GetPropertiesByOwnerId(int ownerId, int pageIndex, int pageSize, string searchTerms)
+        public async Task<PaginatedList> GetPropertiesByOwnerId(int ownerId, int pageIndex, int pageSize, string[] searchTerms)
         {
             var properties = await _propertyRepository.GetPropertiesByOwnerId(ownerId, searchTerms);
 
