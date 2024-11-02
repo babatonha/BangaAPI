@@ -28,7 +28,6 @@ namespace Banga.Data.Repositories
                                 ,[AssignedLawyerID]
                                 ,[PropertyTypeID]
                                 ,[RegistrationTypeId]
-                                ,[StatusID]
                                 ,[SuburbId]
                                 ,[Amenities]
                                 ,[CityID]
@@ -56,7 +55,6 @@ namespace Banga.Data.Repositories
                                 ,@AssignedLawyerID
                                 ,@PropertyTypeID
                                 ,@RegistrationTypeId
-                                ,@StatusID
                                 ,@SuburbId
                                 ,@Amenities
                                 ,@CityID

@@ -52,6 +52,9 @@ app.UseAuthorization();
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+app.MapHub<ChatHub>("/chat-hub");
+
 //app.MapHub<PresenceHub>("hubs/presence");
 //app.MapHub<MessageHub>("hubs/message");
 

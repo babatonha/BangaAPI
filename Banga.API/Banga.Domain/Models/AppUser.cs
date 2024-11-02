@@ -9,6 +9,7 @@ namespace Banga.Data.Models
         public string? LastName { get; set; } 
         public string? IdNumber { get; set; }
         public bool? IsBlocked { get; set; }
+        public bool? IsOnline { get; set; }
         public ICollection<AppUserRole> UserRoles { get; set; }
         public List<Message> MessagesSend { get; set; }
         public List<Message> MessagesReceived { get; set; }

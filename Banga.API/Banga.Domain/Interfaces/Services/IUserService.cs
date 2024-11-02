@@ -11,5 +11,7 @@ namespace Banga.Domain.Interfaces.Services
         Task UpdateUser(CreateUserDTO user);
         Task AssignUserRole(int userId, string roleName);
         Task BlockUser(int userId, bool isBlocked);
+
+        Task UpdateUserOnlineStatus(int userId, bool isOnline);
     }
 }

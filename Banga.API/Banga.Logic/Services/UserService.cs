@@ -69,5 +69,16 @@ namespace Banga.Logic.Services
                 await _databaseContext.SaveChangesAsync();
             }
         }
+
+        public async Task UpdateUserOnlineStatus(int userId, bool isOnline)
+        {
+            var existingUser = await _userManager.Users.Where(x => x.Id == userId).FirstOrDefaultAsync();
+
+            if (existingUser != null)
+            {
+                existingUser.IsOnline = isOnline;
+                await _databaseContext.SaveChangesAsync();
+            }
+        }
     }
 }
