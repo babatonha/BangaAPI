@@ -75,7 +75,8 @@ namespace Banga.Logic.SignalR
             var group = await _messageService.GetMessageGroup(groupName);
 
 
-            if (group.Connections.Any(x => x.Username == recipient.UserName))
+            // if (group.Connections.Any(x => x.Username == recipient.UserName))
+            if (recipient.UserName.Length > 0)
             {
                 message.DateRead = DateTime.UtcNow;
             }
@@ -108,7 +109,7 @@ namespace Banga.Logic.SignalR
         private async Task<Group> AddToGroup(string groupName)
         {
             var group = await _messageService.GetMessageGroup(groupName);
-            var connection = new Connection(Context.ConnectionId, Context.User.GetUsername());
+            var connection = new Connection(Context.ConnectionId, 1);// Context.User.GetUsername());
 
             if (group == null)
             {

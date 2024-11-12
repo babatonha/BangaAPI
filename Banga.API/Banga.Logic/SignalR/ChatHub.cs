@@ -7,17 +7,29 @@ namespace Banga.Logic.SignalR
     {
 
         public readonly IUserService _userService;
+        public readonly IChatService _chatService;
 
-        public static Dictionary<string, int> Users = new();
-
-        public ChatHub(IUserService userService)
+        public ChatHub(IUserService userService, IChatService chatService)
         {
             _userService = userService;
+            _chatService = chatService;
         }
 
         public async Task Connect(int userId)
         {
-            Users.Add(Context.ConnectionId, userId);
+
+            var existingUserConnection = await _chatService.GetConnectionByUserId(userId);
+
+            if (existingUserConnection == null) 
+            {
+                await _chatService.AddConnection(Context.ConnectionId, userId);
+            }
+
+            else
+            {
+                await _chatService.UpdateConnection(Context.ConnectionId, userId, existingUserConnection);
+            }
+
             var user = await _userService.GetUserById(userId);
             if (user is not null)
             {
@@ -27,14 +39,13 @@ namespace Banga.Logic.SignalR
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
-        {
-            int userId;
-            Users.TryGetValue(Context.ConnectionId, out userId);
-            Users.Remove(Context.ConnectionId);
-            var user = await _userService.GetUserById(userId);
+        { 
+            var connection = await _chatService.GetConnectionByConnectionId(Context.ConnectionId);
+            await _chatService.RemoveConnection(Context.ConnectionId);
+            var user = await _userService.GetUserById(connection.UserId);
             if (user is not null)
             {
-                await _userService.UpdateUserOnlineStatus(userId, false);
+                await _userService.UpdateUserOnlineStatus(connection.UserId, false);
                 await Clients.All.SendAsync("Users", user);
             }
         }

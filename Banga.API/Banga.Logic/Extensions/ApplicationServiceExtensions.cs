@@ -28,6 +28,7 @@ namespace Banga.Logic.Extensions
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<ILikesService, LikesService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IChatService, ChatService>();
 
 
 
