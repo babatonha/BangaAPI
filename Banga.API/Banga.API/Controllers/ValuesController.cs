@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Banga.Domain.Interfaces.Services;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -10,10 +11,12 @@ namespace Banga.API.Controllers
     {
         private readonly HttpClient _httpClient;
         private readonly string test;
-        public ValuesController()
+        private readonly IMailjetService _mailjetService;
+        public ValuesController(IMailjetService mailjetService)
         {
             _httpClient = new HttpClient();
             test = "https://infra.devskills.app/api/credit-data";
+            _mailjetService = mailjetService;
 
         }
         [HttpGet("test/{ssn}")]
@@ -37,7 +40,15 @@ namespace Banga.API.Controllers
         }
 
 
-           
+        [HttpGet("mailjet")]
+        public async Task<ActionResult> SendEmail()
+        {
+
+            await _mailjetService.SendEmail("tonhaview@gmail.com", "View Tonha", "This is a test email");
+
+            return Ok();
+        }
+
 
 
 
