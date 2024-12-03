@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Banga.Domain.Interfaces.Services;
+﻿using Banga.Domain.Interfaces.Services;
 using Banga.Domain.Models;
 using Mailjet.Client;
 using Mailjet.Client.Resources;

@@ -8,11 +8,13 @@ namespace Banga.Domain.Models
         [Required]
         public long PropertyId { get; set; }
         [Required]
-        public int StatusId { get; set; }
+        public DateTime ViewingDate { get; set; }
 
-        public int AssignedViewerId { get; set; }
+        public int AllocatedTo { get; set; }
 
         [MaxLength(500)]
-        public string Note { get; set; }
+        public string Note { get; set; } = string.Empty;
+        public string ViewingStatus { get; set; } = string.Empty;
+        public bool IsConfirmed { get; set; }
     }
 }
