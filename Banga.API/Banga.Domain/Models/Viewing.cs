@@ -7,8 +7,12 @@ namespace Banga.Domain.Models
         public long ViewingId { get; set; }
         [Required]
         public long PropertyId { get; set; }
+        [MaxLength(250)]
         [Required]
-        public DateTime ViewingDate { get; set; }
+        public string Title { get; set; } = string.Empty;
+
+        [Required]
+        public DateTime Date { get; set; }
 
         public int AllocatedTo { get; set; }
 

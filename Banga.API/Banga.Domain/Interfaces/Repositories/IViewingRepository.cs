@@ -4,7 +4,7 @@ namespace Banga.Domain.Interfaces.Repositories
 {
     public interface IViewingRepository
     {
-        Task<IEnumerable<Viewing>> GetViewingsByUserId(int userId);
+        Task<IEnumerable<Viewing>> GetPropertyViewingsByUserId(int userId, long propertyId);
         Task<long> CreateViewing(Viewing viewing);
         Task UpdateViewing(Viewing viewing);
         Task DeleteViewing(long viewingId);

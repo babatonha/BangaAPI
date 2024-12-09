@@ -26,10 +26,10 @@ namespace Banga.API.Controllers
             return Ok(await _viewingService.CreateViewing(viewing));
         }
 
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<IEnumerable<Viewing>>> Get(int userId)
+        [HttpGet("{userId}/{propertyId}")]
+        public async Task<ActionResult<IEnumerable<Viewing>>> GetPropertyViewingsByUserId(int userId, long propertyId)
         {
-            var data = await _viewingService.GetViewingsByUserId(userId);
+            var data = await _viewingService.GetPropertyViewingsByUserId( userId,  propertyId);
 
             return Ok(data);
         }

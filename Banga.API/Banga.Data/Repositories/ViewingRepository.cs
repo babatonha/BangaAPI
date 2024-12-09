@@ -25,7 +25,8 @@ namespace Banga.Data.Repositories
                 return await connection.ExecuteScalarAsync<long>(@"
                        INSERT INTO [dbo].[Viewing]
                             ( [PropertyId]
-                              ,[ViewingDate]
+                              ,[Title]
+                              ,[Date]
                               ,[AllocatedTo]
                               ,[ViewingStatus]
                               ,[IsConfirmed]
@@ -34,7 +35,8 @@ namespace Banga.Data.Repositories
                         VALUES
         	                (
                                @PropertyId
-                              ,@ViewingDate
+                              ,@Title
+                              ,@Date
                               ,@AllocatedTo
                               ,@ViewingStatus
                               ,@IsConfirmed
@@ -43,7 +45,8 @@ namespace Banga.Data.Repositories
                         Select SCOPE_IDENTITY()", new
                 {
                     viewing.PropertyId,
-                    viewing.ViewingDate,
+                    viewing.Title,
+                    viewing.Date,
                     viewing.AllocatedTo,
                     viewing.ViewingStatus,
                     viewing.IsConfirmed,
@@ -69,7 +72,7 @@ namespace Banga.Data.Repositories
             });
         }
 
-        public async Task<IEnumerable<Viewing>> GetViewingsByUserId(int userId)
+        public async Task<IEnumerable<Viewing>> GetPropertyViewingsByUserId(int userId, long propertyId)
         {
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
@@ -77,18 +80,21 @@ namespace Banga.Data.Repositories
                             SELECT 
                                V.[ViewingId]
                               ,V.[PropertyId]
-                              ,V.[ViewingDate]
+                              ,V.[Title]
+                              ,V.[Date]
                               ,V.[AllocatedTo]
                               ,V.[ViewingStatus]
                               ,V.[IsConfirmed]
                               ,V.[Note]
                           FROM [Viewing]  V
                           JOIN [dbo].[Property] P ON P.[PropertyId]  = V.[PropertyId]
-                          WHERE P.[OwnerID] = @userId";
+                          WHERE P.[OwnerID] = @userId
+                           AND P.[PropertyId]  = @propertyId";
 
                 return await connection.QueryAsync<Viewing>(sql, new
                 {
-                    userId
+                    userId,
+                    propertyId
                 });
             }
         }
@@ -100,7 +106,8 @@ namespace Banga.Data.Repositories
                    [dbo].[Viewing]
                SET 
                     [PropertyId] = @PropertyId
-                    ,[ViewingDate] = @ViewingDate
+                    ,[Title] = @Title
+                    ,[Date] = @Date
                     ,[AllocatedTo] = @AllocatedTo
                     ,[ViewingStatus] = @ViewingStatus
                     ,[IsConfirmed] = @IsConfirmed
@@ -113,7 +120,8 @@ namespace Banga.Data.Repositories
             await connection.ExecuteAsync(sql, new
             {
                 viewing.PropertyId,
-                viewing.ViewingDate,
+                viewing.Title,
+                viewing.Date,
                 viewing.AllocatedTo,
                 viewing.ViewingStatus,
                 viewing.IsConfirmed,

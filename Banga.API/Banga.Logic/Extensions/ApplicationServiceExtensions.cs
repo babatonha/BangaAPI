@@ -30,6 +30,7 @@ namespace Banga.Logic.Extensions
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IChatService, ChatService>();
             services.AddScoped<IMailjetService, MailjetService>();
+            services.AddScoped<IViewingService, ViewingService>();
 
 
 
@@ -41,6 +42,7 @@ namespace Banga.Logic.Extensions
             services.AddScoped<ILawFirmRepository, LawFirmRepository>();
             services.AddScoped<IBuyerListingRepository, BuyerListingRepository>(); 
             services.AddScoped<ILikesRepository, LikesRepository>();
+            services.AddScoped<IViewingRepository, ViewingRepository>();
 
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.Configure<MailjetSettings>(config.GetSection("MailjetSettings"));

@@ -22,9 +22,9 @@ namespace Banga.Logic.Services
             return _viewingRepository.DeleteViewing(viewingId);
         }
 
-        public Task<IEnumerable<Viewing>> GetViewingsByUserId(int userId)
+        public Task<IEnumerable<Viewing>> GetPropertyViewingsByUserId(int userId, long propertyId)
         {
-            return _viewingRepository.GetViewingsByUserId(userId);
+            return _viewingRepository.GetPropertyViewingsByUserId( userId, propertyId);
         }
 
         public Task UpdateViewing(Viewing viewing)
