@@ -26,30 +26,27 @@ namespace Banga.Data.Repositories
                        INSERT INTO [dbo].[Viewing]
                             ( [PropertyId]
                               ,[Title]
-                              ,[Date]
+                              ,[Start]
                               ,[AllocatedTo]
                               ,[ViewingStatus]
-                              ,[IsConfirmed]
                               ,[Note]
                             )
                         VALUES
         	                (
                                @PropertyId
                               ,@Title
-                              ,@Date
+                              ,@Start
                               ,@AllocatedTo
                               ,@ViewingStatus
-                              ,@IsConfirmed
                               ,@Note
                             )
                         Select SCOPE_IDENTITY()", new
                 {
                     viewing.PropertyId,
                     viewing.Title,
-                    viewing.Date,
+                    viewing.Start,
                     viewing.AllocatedTo,
                     viewing.ViewingStatus,
-                    viewing.IsConfirmed,
                     viewing.Note
 
                 });
@@ -63,7 +60,7 @@ namespace Banga.Data.Repositories
                    [dbo].[Viewing]
 
                WHERE
-                   [ViewingId] = @viewingId";
+                   [Id] = @viewingId";
 
             using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             await connection.ExecuteAsync(sql, new
@@ -78,13 +75,12 @@ namespace Banga.Data.Repositories
             {
                 var sql = $@"
                             SELECT 
-                               V.[ViewingId]
+                               V.[Id]
                               ,V.[PropertyId]
                               ,V.[Title]
-                              ,V.[Date]
+                              ,V.[Start]
                               ,V.[AllocatedTo]
                               ,V.[ViewingStatus]
-                              ,V.[IsConfirmed]
                               ,V.[Note]
                           FROM [Viewing]  V
                           JOIN [dbo].[Property] P ON P.[PropertyId]  = V.[PropertyId]
@@ -107,26 +103,25 @@ namespace Banga.Data.Repositories
                SET 
                     [PropertyId] = @PropertyId
                     ,[Title] = @Title
-                    ,[Date] = @Date
+                    ,[Start] = @Start
                     ,[AllocatedTo] = @AllocatedTo
                     ,[ViewingStatus] = @ViewingStatus
                     ,[IsConfirmed] = @IsConfirmed
                     ,[Note] = @Note
 
                WHERE
-                   [ViewingId] = @ViewingId";
+                   [Id] = @ViewingId";
 
             using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             await connection.ExecuteAsync(sql, new
             {
                 viewing.PropertyId,
                 viewing.Title,
-                viewing.Date,
+                viewing.Start,
                 viewing.AllocatedTo,
                 viewing.ViewingStatus,
-                viewing.IsConfirmed,
                 viewing.Note,
-                viewing.ViewingId,
+                viewing.Id,
 
             });
         }

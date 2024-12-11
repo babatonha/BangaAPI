@@ -18,10 +18,10 @@ namespace Banga.API.Controllers
         [HttpPost]
         public async Task<ActionResult<long>> CreateViewing([FromBody] Viewing viewing)
         {
-            if (viewing.ViewingId > 0)
+            if (viewing.Id > 0)
             {
                 await _viewingService.UpdateViewing(viewing);
-                return Ok(viewing.ViewingId);
+                return Ok(viewing.Id);
             }
             return Ok(await _viewingService.CreateViewing(viewing));
         }
