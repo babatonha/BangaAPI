@@ -1,4 +1,5 @@
 ﻿using Banga.Data.Models;
+using Banga.Domain.Enums;
 using Banga.Domain.Interfaces.Repositories;
 using Banga.Domain.Interfaces.Services;
 using Banga.Domain.ViewModels;
@@ -19,7 +20,7 @@ namespace Banga.Logic.Services
 
             if (offer != null)
             {
-                offer.IsOfferConfirmed = isConfirmed;
+                offer.StatusId = (int)StatusEnum.Accepted;
                 await _propertyOfferRepository.UpdateOffer(offer);
             }
         }
@@ -51,7 +52,7 @@ namespace Banga.Logic.Services
 
         public async Task UpdateOffer(PropertyOffer propertyOffer)
         {
-            if(propertyOffer.IsAccepted == true)
+            if(propertyOffer.StatusId == (int)StatusEnum.Accepted)
             {
                 var propertyOffers = await _propertyOfferRepository.GetOffersByPropertyId(propertyOffer.PropertyId);
 
@@ -59,9 +60,9 @@ namespace Banga.Logic.Services
                 {
                     foreach (var item in propertyOffers)
                     {
-                        if(item.IsAccepted == true && item.PropertyOfferId != propertyOffer.PropertyOfferId)
+                        if(propertyOffer.StatusId == (int)StatusEnum.Accepted && item.PropertyOfferId != propertyOffer.PropertyOfferId)
                         {
-                            item.IsAccepted = false;
+                            item.StatusId = (int)StatusEnum.Created;
                             await _propertyOfferRepository.UpdateOffer(item);
                         }
                     }

@@ -18,6 +18,7 @@ namespace Banga.Domain.Models
 
         [MaxLength(500)]
         public string Note { get; set; } = string.Empty;
-        public string ViewingStatus { get; set; } = string.Empty;
+        public int StatusId { get; set; }
+        public string? Status { get; set; }
     }
 }

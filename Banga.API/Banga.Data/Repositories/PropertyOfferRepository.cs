@@ -26,10 +26,11 @@ namespace Banga.Data.Repositories
                                 ,[OfferByUserId]
                                 ,[Description]
                                 ,[Amount]
+                                  ,[PaymentMethodId]
+                                  ,[StatusId]
                                 ,[CreatedDate]
                                 ,[LastUpdatedDate]
-                                ,[IsAccepted]
-                                ,[IsOfferConfirmed]
+
                             )
                         VALUES
         	                (
@@ -37,10 +38,10 @@ namespace Banga.Data.Repositories
                                 ,@OfferByUserId
                                 ,@Description
                                 ,@Amount
+                                ,@PaymentMethodId
+                                ,@StatusId
                                 ,GETDATE()
                                 ,GETDATE()
-                                ,0
-                                ,0
                             )
                         Select SCOPE_IDENTITY()", new
                     {
@@ -49,6 +50,8 @@ namespace Banga.Data.Repositories
                         ,offer.OfferByUserId
                         ,offer.Amount
                         ,offer.Description
+                        ,offer.PaymentMethodId
+                        ,offer.StatusId
 
                 });
             }
@@ -82,12 +85,16 @@ namespace Banga.Data.Repositories
                                 ,O.[CreatedDate]
                                 ,O.[LastUpdatedDate]
                                 ,O.[Description]
-                                ,O.[IsAccepted]
-                                ,O.[IsOfferConfirmed]
-                                , U.FirstName + ' ' + U.LastName AS BuyerName
+                                ,O.[PaymentMethodId]
+                                ,O.[StatusId]
+                                ,S.[Name] as Status
+                                ,P.[Name] as PaymentMethod
+                                ,U.FirstName + ' ' + U.LastName AS BuyerName
                               FROM 
                                     [dbo].[PropertyOffer] O
                               JOIN [AspNetUsers] U ON U.Id = O.OfferByUserId
+                              JOIN [dbo].[Status] S ON S.StatusID = O.StatusId
+                              JOIN [dbo].[PaymentMethod] P ON P.PaymentMethodId = O.PaymentMethodId
                               WHERE 
                                     O.PropertyID = @propertyId
                                     AND O.OfferByUserId = @buyerId";
@@ -109,12 +116,16 @@ namespace Banga.Data.Repositories
                                 ,O.[CreatedDate]
                                 ,O.[LastUpdatedDate]
                                 ,O.[Description]
-                                ,O.[IsAccepted]
-                                ,O.[IsOfferConfirmed]
+                                ,O.[PaymentMethodId]
+                                ,O.[StatusId]
+                                ,S.[Name] as Status
+                                ,P.[Name] as PaymentMethod
                                 , U.FirstName + ' ' + U.LastName AS BuyerName
                               FROM 
                                     [dbo].[PropertyOffer] O
                               JOIN [AspNetUsers] U ON U.Id = O.OfferByUserId
+                              JOIN [dbo].[Status] S ON S.StatusID = O.StatusId
+                              JOIN [dbo].[PaymentMethod] P ON P.PaymentMethodId = O.PaymentMethodId
                               WHERE 
                                     O.PropertyId = @propertyId";
 
@@ -132,7 +143,8 @@ namespace Banga.Data.Repositories
                             ,[LastUpdatedDate] = GETDATE()
                             ,[IsAccepted] =  @IsAccepted
                             ,[Description] = @Description
-                            ,[IsOfferConfirmed] =  @IsOfferConfirmed
+                            ,[PaymentMethodId] = @PaymentMethodId
+                            ,[StatusId] = @StatusId
 
                    WHERE
                        [PropertyOfferId] = @PropertyOfferId";
@@ -141,8 +153,8 @@ namespace Banga.Data.Repositories
             await connection.ExecuteAsync(sql, new
             {
                  propertyOffer.Amount
-                ,propertyOffer.IsAccepted
-                ,propertyOffer.IsOfferConfirmed
+                ,propertyOffer.StatusId
+                ,propertyOffer.PaymentMethodId
                 ,propertyOffer.Description
                 ,propertyOffer.PropertyOfferId
             });
@@ -157,8 +169,14 @@ namespace Banga.Data.Repositories
                                   O.[PropertyOfferID]
                                  ,O.[PropertyID]
                                  ,O.[OfferBy]
-                                 ,O.[Amount]                    
+                                 ,O.[Amount]
+                                ,O.[PaymentMethodId]
+                                ,O.[StatusId]
+                                ,S.[Name] as Status
+                                ,P.[Name] as PaymentMethod
                               FROM [dbo].[PropertyOffer] O
+                              JOIN [dbo].[Status] S ON S.StatusID = O.StatusId
+                              JOIN [dbo].[PaymentMethod] P ON P.PaymentMethodId = O.PaymentMethodId
                               WHERE O.PropertyID = @propertyId";
 
                 return await connection.QueryAsync<PropertyOffer>(sql, new { propertyId });
@@ -174,16 +192,20 @@ namespace Banga.Data.Repositories
 	                            O.PropertyOfferId,
 	                            O.PropertyId,
 	                            O.[Description],
-	                            O.IsAccepted,
-                                O.IsOfferConfirmed,
 	                            O.Amount,
 	                            O.OfferByUserId,
 	                            T.[Name] AS PropertyType,
 	                            P.Price,
 	                            P.[Address]
+                                ,O.[PaymentMethodId]
+                                ,O.[StatusId]
+                                ,S.[Name] as Status
+                                ,P.[Name] as PaymentMethod
                             FROM PropertyOffer O
                             JOIN Property  P ON P.PropertyId = O.PropertyId
                             JOIN PropertyType T ON T.PropertyTypeID = P.PropertyTypeId
+                              JOIN [dbo].[Status] S ON S.StatusID = O.StatusId
+                              JOIN [dbo].[PaymentMethod] P ON P.PaymentMethodId = O.PaymentMethodId
                             WHERE 
                             P.IsActive = 1
                             AND P.IsDeleted = 0
@@ -208,12 +230,16 @@ namespace Banga.Data.Repositories
                                 ,O.[CreatedDate]
                                 ,O.[LastUpdatedDate]
                                 ,O.[Description]
-                                ,O.[IsAccepted]
-                                ,O.[IsOfferConfirmed]
+                                ,O.[PaymentMethodId]
+                                ,O.[StatusId]
+                                ,S.[Name] as Status
+                                ,P.[Name] as PaymentMethod
                                 , U.FirstName + ' ' + U.LastName AS BuyerName
                               FROM 
                                     [dbo].[PropertyOffer] O
                               JOIN [AspNetUsers] U ON U.Id = O.OfferByUserId
+                              JOIN [dbo].[Status] S ON S.StatusID = O.StatusId
+                              JOIN [dbo].[PaymentMethod] P ON P.PaymentMethodId = O.PaymentMethodId
                               WHERE 
                                     O.PropertyOfferId = @offerId";
 

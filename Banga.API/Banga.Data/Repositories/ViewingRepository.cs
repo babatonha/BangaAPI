@@ -1,10 +1,7 @@
-﻿using Banga.Data.Queries;
-using Banga.Domain.Interfaces.Repositories;
+﻿using Banga.Domain.Interfaces.Repositories;
 using Banga.Domain.Models;
-using CloudinaryDotNet.Actions;
 using Dapper;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 
 namespace Banga.Data.Repositories
@@ -28,7 +25,7 @@ namespace Banga.Data.Repositories
                               ,[Title]
                               ,[Start]
                               ,[AllocatedTo]
-                              ,[ViewingStatus]
+                              ,[StatusId]
                               ,[Note]
                             )
                         VALUES
@@ -37,7 +34,7 @@ namespace Banga.Data.Repositories
                               ,@Title
                               ,@Start
                               ,@AllocatedTo
-                              ,@ViewingStatus
+                              ,@StatusId
                               ,@Note
                             )
                         Select SCOPE_IDENTITY()", new
@@ -46,7 +43,7 @@ namespace Banga.Data.Repositories
                     viewing.Title,
                     viewing.Start,
                     viewing.AllocatedTo,
-                    viewing.ViewingStatus,
+                    viewing.StatusId,
                     viewing.Note
 
                 });
@@ -80,7 +77,7 @@ namespace Banga.Data.Repositories
                               ,V.[Title]
                               ,V.[Start]
                               ,V.[AllocatedTo]
-                              ,V.[ViewingStatus]
+                              ,V.[StatusId]
                               ,V.[Note]
                           FROM [Viewing]  V
                           JOIN [dbo].[Property] P ON P.[PropertyId]  = V.[PropertyId]
@@ -105,7 +102,7 @@ namespace Banga.Data.Repositories
                     ,[Title] = @Title
                     ,[Start] = @Start
                     ,[AllocatedTo] = @AllocatedTo
-                    ,[ViewingStatus] = @ViewingStatus
+                    ,[StatusId] = @StatusId
                     ,[IsConfirmed] = @IsConfirmed
                     ,[Note] = @Note
 
@@ -119,7 +116,7 @@ namespace Banga.Data.Repositories
                 viewing.Title,
                 viewing.Start,
                 viewing.AllocatedTo,
-                viewing.ViewingStatus,
+                viewing.StatusId,
                 viewing.Note,
                 viewing.Id,
 
